@@ -1,0 +1,21 @@
+{
+  "frontend/src/App.tsx": "Main application component that renders the LandingPage component with global styling applied.",
+  "frontend/src/pages/LandingPage.tsx": "Complete landing page layout that orchestrates all sections (Hero, Features, AI Insights, Analytics, Pricing, FAQ, Contact) with header and footer.",
+  "frontend/src/components/site/SiteHeader.tsx": "Responsive header with the uploaded NexaProfit Secure logo, desktop navigation, mobile sheet menu, and smooth scroll-to-section functionality with red accent styling.",
+  "frontend/src/components/site/SiteFooter.tsx": "Footer component with brand info displaying \"NexaProfit\" as the gradient brand name, quick links, social icons, legal links, disclaimer, and Caffeine.ai attribution with UTM tracking.",
+  "frontend/src/components/site/HeroSection.tsx": "Hero section with background image, grid overlay, gradient text, CTA buttons, and key statistics display.",
+  "frontend/src/components/site/FeaturesSection.tsx": "Features grid showcasing six AI-powered capabilities with icons, badges, and hover effects in black/red theme.",
+  "frontend/src/components/insights/AIInsightsSection.tsx": "AI insights display fetching real data from backend, showing signal cards with confidence scores, relevance, and demo disclaimer.",
+  "frontend/src/components/site/AnalyticsPreviewSection.tsx": "Performance analytics section with animated bar chart, key metrics cards, and illustrative data disclaimer.",
+  "frontend/src/components/site/PricingSection.tsx": "Investment plans section fetching backend data, displaying three plan cards with AI narratives, risk levels, and CTA buttons; the second card (Popular/Professional) now displays \"$51 - $200\" as Minimum Investment while others show \"$10 - $50\".",
+  "frontend/src/components/site/FaqSection.tsx": "FAQ section using Accordion component with six common questions about the AI investment platform.",
+  "frontend/src/components/site/ContactSection.tsx": "Contact form with validation, lead submission, success/error states, and admin toggle to view recent inquiries.",
+  "frontend/src/hooks/useAIInsights.ts": "React Query hook to fetch AI insights from the backend actor.",
+  "frontend/src/hooks/useInvestmentPlans.ts": "React Query hook to fetch investment plans from the backend actor.",
+  "frontend/src/hooks/useLeadSubmission.ts": "React Query mutation hook to submit lead forms to the backend with cache invalidation.",
+  "frontend/src/hooks/useLeads.ts": "React Query hook to fetch submitted leads from backend, enabled only when admin toggle is active.",
+  "frontend/src/index.css": "Global styles with dark theme color system using HSL values, black background with red accents, reduced motion support, and accessibility focus styles.",
+  "frontend/tailwind.config.js": "Tailwind configuration with custom color tokens, Inter and JetBrains Mono fonts, custom animations, and extended theme for black/red AI aesthetic.",
+  "frontend/index.html": "HTML entry point with SEO meta tags, favicon reference, Google Fonts preconnect, and dark mode class on body.",
+  "frontend/public/favicon.svg": "Custom SVG favicon with geometric logo design in black background with red accent matching the brand theme."
+}

@@ -1,0 +1,22 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Update Pricing minimum investment range text",
+  "requirements": [
+    {
+      "id": "REQ-16",
+      "summary": "Change the displayed \"Minimum Investment\" range for the selected Pricing card to exactly \"$51 - $200\" without altering any other pricing ranges.",
+      "acceptanceCriteria": [
+        "In the Pricing section, the selected \"Minimum Investment\" value renders exactly as \"$51 - $200\" (including spacing around the hyphen).",
+        "No other text elements outside the selected XPath are modified as part of this change."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/site/PricingSection.tsx",
+          "operation": "modify",
+          "description": "Update the hardcoded \"Minimum Investment\" displayed text for the selected element (the conditional branch for the highlighted/second pricing card currently rendering \"$201 - $1000\") to instead render exactly \"$51 - $200\", leaving all other branches and surrounding markup unchanged to satisfy the XPath-only change constraint."
+        }
+      ]
+    }
+  ]
+}

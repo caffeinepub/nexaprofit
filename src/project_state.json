@@ -1,0 +1,182 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 17,
+  "summary": "Build an AI-forward, technologically advanced investment website branded as “NexaProfit” with a black and red color theme.",
+  "architectural_notes": [],
+  "known_issues": [
+    "Pricing/investment plans section sometimes shows no plans due to frontend actor/canister connection (useActor/agent) not initializing or loading before data fetch, resulting in an empty plans list."
+  ],
+  "isFixRequest": true,
+  "existing_features": [
+    {
+      "id": "feature-create-a-responsive-investment-marketing-website-with-a-consistent-black-and-red-visual-theme-and-an-ai-technologically-advanced-aesthetic-dark-ui-high-contrast-red-accents-modern-typography-subtle-glow-scanline-grid-motifs",
+      "title": "Create a responsive investment marketing website with a consistent black-and-red visual theme and an “AI technologically advanced” aesthetic (dark UI, high-contrast red accents, modern typography, subtle glow/scanline/grid motifs).",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-core-website-pages-sections-with-clear-investment-site-information-architecture-hero-product-overview-ai-driven-features-performance-analytics-preview-plans-pricing-faqs-and-a-contact-lead-capture-section",
+      "title": "Implement core website pages/sections with clear investment-site information architecture: hero, product overview, AI-driven features, performance/analytics preview, plans/pricing, FAQs, and a contact/lead capture section.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-ai-insights-experience-that-feels-technologically-advanced-without-using-external-ai-llm-integrations-show-sample-signals-e-g-trend-strength-volatility-sentiment-index-confidence-scores-and-short-generated-by-system-explanations-sourced-from-the-canister",
+      "title": "Add an “AI Insights” experience that feels technologically advanced without using external AI/LLM integrations: show sample signals (e.g., trend strength, volatility, sentiment index), confidence scores, and short generated-by-system explanations sourced from the canister.",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-wire-the-frontend-to-the-backend-using-react-query-for-data-fetching-and-loading-error-states-skeletons-spinners-that-match-the-black-red-theme",
+      "title": "Wire the frontend to the backend using React Query for data fetching and loading/error states (skeletons/spinners) that match the black/red theme.",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-subtle-performant-tech-micro-interactions-hover-states-animated-chart-lines-bars-gradient-glow-transitions-that-reinforce-the-ai-forward-brand-while-remaining-accessible-reduced-motion-support",
+      "title": "Add subtle, performant “tech” micro-interactions (hover states, animated chart lines/bars, gradient/glow transitions) that reinforce the AI-forward brand while remaining accessible (reduced motion support).",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-include-a-prominent-disclaimer-section-footer-copy-stating-the-site-is-a-demo-and-not-financial-advice",
+      "title": "Include a prominent disclaimer section/footer copy stating the site is a demo and not financial advice.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-lead-capture-form-name-email-message-that-validates-inputs-client-side-and-stores-submissions-in-the-backend-for-demo-purposes-with-a-simple-list-retrieval-for-admin-like-viewing-in-the-ui",
+      "title": "Add a lead capture form (name, email, message) that validates inputs client-side and stores submissions in the backend for demo purposes (with a simple list retrieval for admin-like viewing in the UI).",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-basic-seo-and-polish-meaningful-page-title-meta-description-favicon-and-consistent-section-headings",
+      "title": "Add basic SEO and polish: meaningful page title, meta description, favicon, and consistent section headings.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-site-header-brand-text-in-the-selected-element-html-1-body-1-div-1-div-1-header-1-div-1-div-1-span-1-from-the-current-value-to-exactly-nexaprofit-secure",
+      "title": "Update the site header brand text in the selected element (/html[1]/body[1]/div[1]/div[1]/header[1]/div[1]/div[1]/span[1]) from the current value to exactly “NexaProfit Secure”.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-only-the-selected-header-logo-img-element-at-xpath-html-1-body-1-div-1-div-1-header-1-div-1-div-1-img-1-to-use-the-user-uploaded-image-as-the-header-logo-ensuring-the-logo-renders-correctly-in-both-desktop-and-mobile-header-layouts",
+      "title": "Update only the selected header logo <img> element at XPath /html[1]/body[1]/div[1]/div[1]/header[1]/div[1]/div[1]/img[1] to use the user-uploaded image as the header logo, ensuring the logo renders correctly in both desktop and mobile header layouts.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-only-the-selected-element-at-xpath-html-1-body-1-div-1-div-1-main-1-section-5-div-1-div-2-div-1-div-2-div-2-div-2-so-that-its-displayed-text-matches-the-range-format-exactly-10-50",
+      "title": "Update only the selected element at XPath /html[1]/body[1]/div[1]/div[1]/main[1]/section[5]/div[1]/div[2]/div[1]/div[2]/div[2]/div[2] so that its displayed text matches the range format exactly: \"$10 - $50\".",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-only-the-selected-element-at-xpath-html-1-body-1-div-1-div-1-main-1-section-5-div-1-div-2-div-2-div-2-div-2-div-2-so-that-its-displayed-text-matches-the-range-format-exactly-51-200",
+      "title": "Update ONLY the selected element at XPath /html[1]/body[1]/div[1]/div[1]/main[1]/section[5]/div[1]/div[2]/div[2]/div[2]/div[2]/div[2 so that its displayed text matches the range format exactly: \"$51 - $200\".",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-only-the-footer-brand-name-text-in-the-selected-element-at-xpath-html-1-body-1-div-1-div-1-footer-1-div-1-div-1-div-1-div-1-span-1-so-that-it-displays-exactly-nexaprofit",
+      "title": "Update ONLY the footer brand name text in the selected element at XPath /html[1]/body[1]/div[1]/div[1]/footer[1]/div[1]/div[1]/div[1]/div[1]/span[1] so that it displays exactly: \"NexaProfit\".",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-only-the-selected-element-at-xpath-html-1-body-1-div-1-div-1-main-1-section-5-div-1-div-2-div-2-div-2-div-2-div-2-so-that-its-displayed-text-matches-the-range-format-exactly-201-1000",
+      "title": "Update ONLY the selected element at XPath /html[1]/body[1]/div[1]/div[1]/main[1]/section[5]/div[1]/div[2]/div[2]/div[2]/div[2]/div[2] so that its displayed text matches the range format exactly: \"$201 - $1000\".",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-only-the-selected-element-at-xpath-html-1-body-1-div-1-div-1-main-1-section-5-div-1-div-2-div-1-div-2-div-2-div-2-so-that-its-displayed-text-matches-exactly-51-200",
+      "title": "Update ONLY the selected element at XPath /html[1]/body[1]/div[1]/div[1]/main[1]/section[5]/div[1]/div[2]/div[1]/div[2]/div[2]/div[2 so that its displayed text matches exactly: \"$51 - $200\".",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Create an investment website with a black and red theme",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Make the investment website feel AI-driven / technologically advanced (AI-forward branding and experience)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "Create a Motoko backend in the single main actor that serves the site’s dynamic demo data: investment plans/pricing, FAQs (optional), and AI insight signal data via query calls suitable for React Query.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Replace the site header image/logo with the user-uploaded image (swap the header image at the selected element).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Update the displayed investment plan pricing to use the range format “$51 - $200” (adjust pricing copy/values accordingly).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Rename the site branding from “NexaProfit Secure” to “NexaProfit” (update visible brand text and any titles/meta where applicable).",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Update investment plan details displayed in the pricing section (Starter $10 - $50 at 5% daily, Premium $51 - $200 at 6% daily, Professional $201 - $1000 at 7% daily).",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "NexaProfit",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}
