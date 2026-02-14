@@ -1,36 +1,28 @@
 {
   "kind": "build_request",
-  "title": "Update selected pricing range text to “$51 - $200”",
+  "title": "Pricing range text: $201 - $1000 (already covered by existing feature)",
   "priority": "normal",
-  "requirements": [
-    {
-      "id": "REQ-16",
-      "text": "Update ONLY the selected element at XPath /html[1]/body[1]/div[1]/div[1]/main[1]/section[5]/div[1]/div[2]/div[1]/div[2]/div[2]/div[2 so that its displayed text matches exactly: \"$51 - $200\".",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "recent-msg-user-1"
-        ],
-        "quotes": [
-          "$51 - $200"
-        ]
-      },
-      "acceptanceCriteria": [
-        "In the Pricing section, the selected \"Minimum Investment\" value renders exactly as \"$51 - $200\" (including spacing around the hyphen).",
-        "No other text elements outside the selected XPath are modified as part of this change."
-      ]
-    }
-  ],
+  "requirements": [],
   "constraints": [
-    "Apply the change ONLY to the element identified by XPath /html[1]/body[1]/div[1]/div[1]/main[1]/section[5]/div[1]/div[2]/div[1]/div[2]/div[2]/div[2.",
-    "Use English for any user-facing text."
+    "Do not create a new requirement for this request because it exactly matches an existing feature: update ONLY the selected element at XPath /html[1]/body[1]/div[1]/div[1]/main[1]/section[5]/div[1]/div[2]/div[2]/div[2]/div[2]/div[2] so that its displayed text matches \"$201 - $1000\".",
+    "Apply any instruction ONLY to the selected element at XPath /html[1]/body[1]/div[1]/div[1]/main[1]/section[5]/div[1]/div[2]/div[2]/div[2]/div[2]/div[2]."
   ],
   "nonGoals": [
-    "Do not change other plan ranges (e.g., \"$10 - $50\" or \"$201 - $1000\") unless explicitly requested in a separate instruction.",
-    "Do not modify backend plan data or schemas as part of this UI-only text change."
+    "Do not change any other pricing copy, plan cards, plan ordering, returns/APY labels, or backend investment plan data beyond the already-defined existing feature for this XPath/text update.",
+    "Do not address the known pricing plans loading/actor initialization issue as part of this request."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }

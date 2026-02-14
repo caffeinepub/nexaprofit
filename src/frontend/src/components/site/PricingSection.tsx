@@ -102,7 +102,7 @@ export function PricingSection() {
 
                   <div className="pt-4 border-t border-border/40">
                     <div className="text-sm text-muted-foreground mb-2">Minimum Investment</div>
-                    <div className="text-2xl font-bold">{index === 1 ? '$51 - $200' : '$10 - $50'}</div>
+                    <div className="text-2xl font-bold">{index === 1 ? '$201 - $1000' : '$10 - $50'}</div>
                   </div>
 
                   <div className="pt-4 border-t border-border/40 space-y-3">

@@ -1,27 +1,15 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-14T08:43:23.338Z",
+  "generatedAt": "2026-02-14T12:41:27.200Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 1,
-    "implemented": 1,
-    "items": [
-      {
-        "id": "REQ-16",
-        "summary": "Update ONLY the selected element at XPath /html[1]/body[1]/div[1]/div[1]/main[1]/section[5]/div[1]/div[2]/div[1]/div[2]/div[2]/div[2 so that its displayed text matches exactly: \"$51 - $200\".",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/components/site/PricingSection.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/site/PricingSection.tsx"
-        ]
-      }
-    ]
+    "total": 0,
+    "implemented": 0,
+    "items": []
   },
   "changedFiles": [
     "build-request.json",

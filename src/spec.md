@@ -1,9 +1,9 @@
 # Specification
 
 ## Summary
-**Goal:** Update the selected “Minimum Investment” pricing range text to display exactly “$51 - $200”.
+**Goal:** Update the displayed pricing range text in the specified UI element to “$201 - $1000”.
 
 **Planned changes:**
-- Change the displayed text of the single selected UI element at XPath `/html[1]/body[1]/div[1]/div[1]/main[1]/section[5]/div[1]/div[2]/div[1]/div[2]/div[2]/div[2` to exactly: `$51 - $200`.
+- Change only the text content of the element at XPath `/html[1]/body[1]/div[1]/div[1]/main[1]/section[5]/div[1]/div[2]/div[2]/div[2]/div[2]/div[2]` to exactly `$201 - $1000`.
 
-**User-visible outcome:** In the Pricing section, the selected “Minimum Investment” value renders exactly as “$51 - $200”, with no other text changes elsewhere.
+**User-visible outcome:** The pricing range in that specific section displays “$201 - $1000”.
