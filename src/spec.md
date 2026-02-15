@@ -1,9 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Update the displayed pricing range text in the specified UI element to “$201 - $1000”.
+**Goal:** Add a Dashboard button that navigates to a new Wallet hash route, and create a basic Wallet page with navigation back to the Dashboard.
 
 **Planned changes:**
-- Change only the text content of the element at XPath `/html[1]/body[1]/div[1]/div[1]/main[1]/section[5]/div[1]/div[2]/div[2]/div[2]/div[2]/div[2]` to exactly `$201 - $1000`.
+- Update only the user-selected Dashboard button so its visible label is exactly "Go to Wallet" and clicking it navigates to the Wallet hash route (e.g., #/wallet).
+- Add a new "/wallet" hash route and render a new Wallet page component for it.
+- On the Wallet page, display a clear "Wallet" title and provide a "Back to Dashboard" in-app navigation option.
 
-**User-visible outcome:** The pricing range in that specific section displays “$201 - $1000”.
+**User-visible outcome:** Users can click "Go to Wallet" from the Dashboard to open the Wallet page, then use "Back to Dashboard" to return.

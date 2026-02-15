@@ -1,14 +1,50 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-14T12:41:27.198Z",
-  "summary": "BuildRequest specified no formal requirements (only a constraint to update displayed text at a specific XPath to \"$201 - $1000\" and not change other pricing copy). The diff indicates PricingSection was modified and the frontend summary claims the second pricing card now displays \"$201 - $1000\" as Minimum Investment.",
-  "missing_requirements": [],
-  "hallucinated_features": [],
-  "confidence": 0.56,
+  "generatedAt": "2026-02-15T04:05:07.574Z",
+  "summary": "REQ-2 (Wallet hash route + page) is implemented via new WalletPage and router updates. REQ-1 (update only the specific existing button at the provided XPath to say exactly \"Go to Wallet\" and navigate via hash routing) is not evidenced in the diff; instead routing props were added to DashboardPage without showing the targeted button change. The new Wallet page also includes additional UI (balance/actions/transactions/footer) beyond the requested minimal page.",
+  "missing_requirements": [
+    {
+      "id": "REQ-1",
+      "requirement": "Update ONLY the selected button element (XPath: /html[1]/body[1]/div[1]/div[1]/section[7]/div[1]/div[2]/div[1]/div[2]/form[1]/button[1]) so the visible label reads exactly \"Go to Wallet\" and clicking it navigates to the Wallet hash route (e.g., #/wallet), without modifying any other UI text/buttons.",
+      "reason": "The diff summary does not show any change to the specific button (likely on the Landing/Pricing section per the XPath). The only related change shown is adding an onNavigateToWallet prop to DashboardPage, but no evidence of the exact button label \"Go to Wallet\" or that only the targeted element was changed.",
+      "evidence": [
+        "frontend/src/pages/DashboardPage.tsx (modified, truncated; shows new onNavigateToWallet prop but no button text change)",
+        "frontend-file-summaries.txt (mentions PricingSection CTA/min investment changes but does not mention updating a button label to \"Go to Wallet\" or wallet navigation)"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Wallet page includes \"Available Balance\" with \"$0.00\" and action buttons (\"Deposit Funds\", \"Withdraw\") plus a \"Recent Transactions\" empty state and explanatory copy.",
+      "reason": "BuildRequest explicitly lists real wallet functionality as a non-goal; the requested Wallet page requirements only asked for a clear title (\"Wallet\") and a \"Back to Dashboard\" navigation.",
+      "evidence": [
+        "frontend/src/pages/WalletPage.tsx"
+      ]
+    },
+    {
+      "description": "Added a footer on the Wallet page with Caffeine.ai attribution and a heart symbol in the text.",
+      "reason": "Not requested by REQ-1 or REQ-2; only a title and back navigation were required for the Wallet page.",
+      "evidence": [
+        "frontend/src/pages/WalletPage.tsx"
+      ]
+    },
+    {
+      "description": "DashboardPage API changed to accept onNavigateToWallet prop (and presumably related UI changes, though truncated).",
+      "reason": "The BuildRequest required updating only the specific selected button element (by XPath). Modifying DashboardPage is not requested and may violate the 'ONLY the user-selected element' constraint unless it is definitively the file containing that XPath element (not evidenced here).",
+      "evidence": [
+        "frontend/src/pages/DashboardPage.tsx",
+        "frontend/src/router/AppRouter.tsx"
+      ]
+    }
+  ],
+  "confidence": 0.66,
   "changed_files": [
     "frontend-file-summaries.txt",
-    "frontend/src/components/site/PricingSection.tsx",
+    "frontend/src/pages/DashboardPage.tsx",
+    "frontend/src/pages/WalletPage.tsx",
+    "frontend/src/router/AppRouter.tsx",
+    "frontend/src/router/useHashRoute.ts",
     "project_state.json"
   ]
 }

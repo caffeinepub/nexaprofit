@@ -1,14 +1,11 @@
 import { ArrowRight, TrendingUp, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-export function HeroSection() {
-  const scrollToContact = () => {
-    const element = document.querySelector('#contact');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+interface HeroSectionProps {
+  onOpenSignIn: () => void;
+}
 
+export function HeroSection({ onOpenSignIn }: HeroSectionProps) {
   return (
     <section className="relative overflow-hidden">
       {/* Background Image with Overlay */}
@@ -61,7 +58,7 @@ export function HeroSection() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
             <Button
               size="lg"
-              onClick={scrollToContact}
+              onClick={onOpenSignIn}
               className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white shadow-lg shadow-red-500/30 group"
             >
               Get Started

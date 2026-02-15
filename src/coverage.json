@@ -1,22 +1,50 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-14T12:41:27.200Z",
+  "generatedAt": "2026-02-15T04:05:07.576Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 0,
-    "implemented": 0,
-    "items": []
+    "total": 2,
+    "implemented": 1,
+    "items": [
+      {
+        "id": "REQ-1",
+        "summary": "Update ONLY the selected button element (XPath: /html[1]/body[1]/div[1]/div[1]/section[7]/div[1]/div[2]/div[1]/div[2]/form[1]/button[1]) so the visible label reads exactly \"Go to Wallet\" (English) and clicking it navigates the user to the Wallet page/route.",
+        "status": "missing",
+        "plannedFiles": [
+          "frontend/src/components/site/ContactSection.tsx"
+        ],
+        "matchedFiles": []
+      },
+      {
+        "id": "REQ-2",
+        "summary": "Add a new Wallet route to the hash router and render a new Wallet page when the route is active.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/WalletPage.tsx",
+          "frontend/src/router/useHashRoute.ts",
+          "frontend/src/router/AppRouter.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/WalletPage.tsx",
+          "frontend/src/router/useHashRoute.ts",
+          "frontend/src/router/AppRouter.tsx"
+        ]
+      }
+    ]
   },
   "changedFiles": [
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/components/site/PricingSection.tsx",
+    "frontend/src/pages/DashboardPage.tsx",
+    "frontend/src/pages/WalletPage.tsx",
+    "frontend/src/router/AppRouter.tsx",
+    "frontend/src/router/useHashRoute.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

@@ -1,28 +1,58 @@
 {
   "kind": "build_request",
-  "title": "Pricing range text: $201 - $1000 (already covered by existing feature)",
+  "title": "Add Wallet navigation via selected button and create Wallet route/page",
   "priority": "normal",
-  "requirements": [],
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Update ONLY the selected button element (XPath: /html[1]/body[1]/div[1]/div[1]/section[7]/div[1]/div[2]/div[1]/div[2]/form[1]/button[1]) so the visible label reads exactly \"Go to Wallet\" (English) and clicking it navigates the user to the Wallet page/route.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Add  button to Dashboard for go to Wallet",
+          "The user has selected the following 1 element from the page for context... XPath: /html[1]/body[1]/div[1]/div[1]/section[7]/div[1]/div[2]/div[1]/div[2]/form[1]/button[1]"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Only the selected button’s text/behavior changes; no other UI text/buttons are modified.",
+        "The selected button’s visible text is exactly \"Go to Wallet\".",
+        "Clicking the selected button navigates to the Wallet route using the app’s hash routing (e.g., #/wallet)."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Add a new Wallet route to the hash router and render a new Wallet page when the route is active.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-1"
+        ],
+        "quotes": [
+          "Add  button to Dashboard for go to Wallet"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The router supports navigating to \"/wallet\" (hash route).",
+        "Navigating to #/wallet renders a Wallet page component.",
+        "The Wallet page has a clear title (\"Wallet\") and provides an in-app way to return to the Dashboard (\"Back to Dashboard\")."
+      ]
+    }
+  ],
   "constraints": [
-    "Do not create a new requirement for this request because it exactly matches an existing feature: update ONLY the selected element at XPath /html[1]/body[1]/div[1]/div[1]/main[1]/section[5]/div[1]/div[2]/div[2]/div[2]/div[2]/div[2] so that its displayed text matches \"$201 - $1000\".",
-    "Apply any instruction ONLY to the selected element at XPath /html[1]/body[1]/div[1]/div[1]/main[1]/section[5]/div[1]/div[2]/div[2]/div[2]/div[2]/div[2]."
+    "Apply changes ONLY to the user-selected element for the button update (XPath provided).",
+    "Use English for any user-facing text.",
+    "Do not modify files under frontend/src/components/ui or other frontend immutablePaths.",
+    "Do not implement sending emails (including to payakash22@gmail.com), as email features are not supported in this project."
   ],
   "nonGoals": [
-    "Do not change any other pricing copy, plan cards, plan ordering, returns/APY labels, or backend investment plan data beyond the already-defined existing feature for this XPath/text update.",
-    "Do not address the known pricing plans loading/actor initialization issue as part of this request."
+    "Implementing email notifications on button click.",
+    "Implementing real wallet functionality (balances, transactions, deposits/withdrawals), unless explicitly requested later."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [],
-    "goalsToRemove": [],
-    "preferencesToAdd": [],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
   }
 }

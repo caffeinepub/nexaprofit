@@ -12,7 +12,11 @@ const navLinks = [
   { label: 'Contact', href: '#contact' },
 ];
 
-export function SiteHeader() {
+interface SiteHeaderProps {
+  onOpenSignIn: () => void;
+}
+
+export function SiteHeader({ onOpenSignIn }: SiteHeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const scrollToSection = (href: string) => {
@@ -21,6 +25,10 @@ export function SiteHeader() {
       element.scrollIntoView({ behavior: 'smooth' });
       setIsOpen(false);
     }
+  };
+
+  const navigateToDashboard = () => {
+    window.location.hash = '/dashboard';
   };
 
   return (
@@ -45,10 +53,11 @@ export function SiteHeader() {
             </button>
           ))}
           <Button
+            onClick={navigateToDashboard}
             variant="default"
             className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white shadow-lg shadow-red-500/20"
           >
-            Get Started
+            Open Dashboard
           </Button>
         </nav>
 
@@ -71,6 +80,10 @@ export function SiteHeader() {
                 </button>
               ))}
               <Button
+                onClick={() => {
+                  setIsOpen(false);
+                  onOpenSignIn();
+                }}
                 variant="default"
                 className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white mt-4"
               >

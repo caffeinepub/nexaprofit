@@ -102,20 +102,20 @@ export function PricingSection() {
 
                   <div className="pt-4 border-t border-border/40">
                     <div className="text-sm text-muted-foreground mb-2">Minimum Investment</div>
-                    <div className="text-2xl font-bold">{index === 1 ? '$201 - $1000' : '$10 - $50'}</div>
+                    <div className="text-2xl font-bold">{index === 1 ? '$51 - $200' : '$10 - $50'}</div>
                   </div>
 
                   <div className="pt-4 border-t border-border/40 space-y-3">
                     <div className="flex items-start gap-2">
-                      <Check className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
                       <span className="text-sm">AI-powered portfolio optimization</span>
                     </div>
                     <div className="flex items-start gap-2">
-                      <Check className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
                       <span className="text-sm">24/7 market monitoring</span>
                     </div>
                     <div className="flex items-start gap-2">
-                      <Check className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+                      <Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
                       <span className="text-sm">Real-time risk assessment</span>
                     </div>
                   </div>

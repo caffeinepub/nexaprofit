@@ -1,6 +1,49 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Pricing range text update to \"$201 - $1000\" (XPath-targeted)",
-  "requirements": []
+  "title": "Add hash-route Wallet page and wire existing selected button to navigate to it",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "summary": "Change only the user-selected button so its label is \"Go to Wallet\" and it navigates to the Wallet hash route when clicked.",
+      "acceptanceCriteria": [
+        "Only the selected button’s text/behavior changes; no other UI text/buttons are modified.",
+        "The selected button’s visible text is exactly \"Go to Wallet\".",
+        "Clicking the selected button navigates to the Wallet route using the app’s hash routing (e.g., #/wallet)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/site/ContactSection.tsx",
+          "operation": "modify",
+          "description": "Update ONLY the selected form button element to: (1) render visible text exactly \"Go to Wallet\" (remove any additional icon/label text), and (2) on click, navigate via hash routing to \"/wallet\" (e.g., by setting window.location.hash). Ensure no other strings or buttons in this file are modified."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Add a new /wallet hash route and render a Wallet page with a title and a Back to Dashboard action.",
+      "acceptanceCriteria": [
+        "The router supports navigating to \"/wallet\" (hash route).",
+        "Navigating to #/wallet renders a Wallet page component.",
+        "The Wallet page has a clear title (\"Wallet\") and provides an in-app way to return to the Dashboard (\"Back to Dashboard\")."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/WalletPage.tsx",
+          "operation": "create",
+          "description": "Create a new Wallet page component that displays a clear page title \"Wallet\" and includes a \"Back to Dashboard\" control that navigates via hash routing to \"/dashboard\"."
+        },
+        {
+          "path": "frontend/src/router/useHashRoute.ts",
+          "operation": "modify",
+          "description": "Extend the hash routing type/logic to recognize and return the \"/wallet\" route in addition to existing routes, so navigation to #/wallet is supported."
+        },
+        {
+          "path": "frontend/src/router/AppRouter.tsx",
+          "operation": "modify",
+          "description": "Wire the new \"/wallet\" route into the router so that when active it renders the new WalletPage component. Ensure navigation between routes continues to use hash routing."
+        }
+      ]
+    }
+  ]
 }
