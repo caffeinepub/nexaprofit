@@ -1,21 +1,90 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Wallet balance display update for specific account",
+  "title": "Investment Plans UI simplification and authenticated Start Invest flow",
   "requirements": [
     {
-      "id": "REQ-4",
-      "summary": "Conditionally display $15.00 (instead of $0.00) in the Wallet “Available Balance” card for the specified user/account identifier.",
+      "id": "REQ-9",
+      "summary": "Simplify Investment Plans UI to always show all plans and remove related/browsing mode and generic marketing bullets.",
       "acceptanceCriteria": [
-        "On the Wallet page (frontend/src/pages/WalletPage.tsx), the large balance value in the “Available Balance” card no longer displays “$0.00”.",
-        "The displayed balance for the specified user/account identifier reads “$15.00” (USD formatting with two decimals).",
-        "No other wallet UI text is changed, and all user-facing text remains in English."
+        "On #/plans, the plan cards no longer show a “Show Related Plans” button and there is no “Related Investment Plans” header mode/state.",
+        "All available plans render together in a consistent grid/list view.",
+        "Each plan card displays the plan’s name, description, weekly return, risk level, minimum investment range, and AI narrative (plan.aiNarrative).",
+        "The generic hard-coded bullet list (e.g., “AI-powered portfolio optimization”, “24/7 market monitoring”, “Real-time risk assessment”) is removed from the plan cards."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/WalletPage.tsx",
+          "path": "frontend/src/components/site/PricingSection.tsx",
           "operation": "modify",
-          "description": "Update the large “Available Balance” amount rendering to show “$15.00” for account identifier \"mzmds-idwio-g2zsr-4dzef-bqy4l-hkopr-jkddk-spzk4-utlyx-oqjxf-kae\" (e.g., by reading the logged-in principal via the authorization component’s frontend auth context using useInternetIdentity and matching against this identifier), while keeping the rest of the Wallet UI text unchanged and preserving USD two-decimal formatting. Verify the component's usage instructions before implementing."
+          "description": "Remove the “related plans” state/mode (selectedPlan/getRelatedPlans/header toggle/back button) and always render the full investment plan list. Ensure each plan card displays only plan-relevant fields (name, description, weekly return, risk level, minimumInvestmentRange, aiNarrative) and remove the hard-coded generic marketing bullet list. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "summary": "Add a Start Invest action per plan and implement an in-app, multi-step investing UI flow (no real payments).",
+      "acceptanceCriteria": [
+        "Each plan card includes a clearly labeled “Start Invest” button (English text).",
+        "Clicking “Start Invest” opens an in-app flow (modal or dedicated UI section) that guides the user through investing in the selected plan.",
+        "The flow includes, at minimum: selecting/confirming the plan, entering an investment amount, reviewing a summary, and confirming the purchase/invest action.",
+        "The flow includes visible success and cancel/close actions, and the UI returns to the plans list after completion or cancel."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/site/StartInvestFlowDialog.tsx",
+          "operation": "create",
+          "description": "Create a reusable, in-app investing flow UI (modal dialog) that supports: (1) selected plan confirmation, (2) amount entry, (3) review summary, (4) confirm action, plus cancel/close and a success state. Use shadcn-ui dialog/form primitives already available under frontend/src/components/ui to present the flow consistently. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/site/PricingSection.tsx",
+          "operation": "modify",
+          "description": "Add a clearly labeled “Start Invest” button to each plan card and wire it to open StartInvestFlowDialog with the clicked plan as context. Ensure cancel/close and success reset the flow state and return to the plans list view. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "summary": "Require Internet Identity authentication before entering the Start Invest flow, using the existing sign-in dialog and non-immutable integration via props/callbacks.",
+      "acceptanceCriteria": [
+        "When not authenticated, clicking “Start Invest” triggers the existing sign-in dialog (no new auth system).",
+        "After a successful sign-in, the user can proceed to the investing flow for the selected plan without needing to navigate away from #/plans.",
+        "No changes are made to the immutable authentication hook files; integration is done by passing callbacks/props through existing editable components (e.g., InvestmentPlansPage -> PricingSection)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/router/AppRouter.tsx",
+          "operation": "modify",
+          "description": "Enhance the existing sign-in dialog wiring to support a caller-provided success callback (e.g., open Start Invest flow) instead of always navigating to the dashboard. Ensure the sign-in dialog can close and then run the provided callback while remaining on the current route (/plans) when triggered from Investment Plans. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/InvestmentPlansPage.tsx",
+          "operation": "modify",
+          "description": "Pass the existing sign-in opener callback down into PricingSection (as an optional-success callback function) so PricingSection can request authentication before opening Start Invest. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/site/PricingSection.tsx",
+          "operation": "modify",
+          "description": "Gate “Start Invest” behind authentication by checking the existing Internet Identity state (without editing immutable auth hooks). If unauthenticated, call the passed-in sign-in opener and resume into StartInvestFlowDialog after successful sign-in, without leaving #/plans. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/site/SiteHeader.tsx",
+          "operation": "modify",
+          "description": "Adjust prop typing (if needed) so onOpenSignIn can accept an optional success callback while remaining backward-compatible with existing no-argument calls. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/LandingPage.tsx",
+          "operation": "modify",
+          "description": "Update prop typing/usage (if needed) to remain compatible with the updated onOpenSignIn function signature while keeping existing behavior unchanged. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/site/HeroSection.tsx",
+          "operation": "modify",
+          "description": "Update prop typing/usage (if needed) to remain compatible with the updated onOpenSignIn function signature while keeping existing behavior unchanged. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/router/ProtectedDashboardRoute.tsx",
+          "operation": "modify",
+          "description": "Update prop typing/usage (if needed) to remain compatible with the updated onOpenSignIn function signature while keeping the existing protected-route sign-in behavior unchanged. Verify the component's usage instructions before implementing."
         }
       ]
     }

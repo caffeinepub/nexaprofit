@@ -1,23 +1,28 @@
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import { useInternetIdentity } from '@/hooks/useInternetIdentity';
 import { useGetCallerUserProfile } from '@/hooks/useQueries';
-import { TrendingUp, Activity, DollarSign, BarChart3, Wallet } from 'lucide-react';
+import { TrendingUp, Activity, DollarSign, BarChart3, Wallet, TrendingDown } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { getFormattedAvailableBalance } from '@/utils/availableBalance';
 
 interface DashboardPageProps {
   onNavigateToLanding: () => void;
   onNavigateToWallet: () => void;
+  onNavigateToPlans: () => void;
 }
 
-export function DashboardPage({ onNavigateToLanding, onNavigateToWallet }: DashboardPageProps) {
+export function DashboardPage({ onNavigateToLanding, onNavigateToWallet, onNavigateToPlans }: DashboardPageProps) {
   const { identity } = useInternetIdentity();
   const { data: userProfile } = useGetCallerUserProfile();
+
+  const currentPrincipal = identity?.getPrincipal().toString();
+  const balance = getFormattedAvailableBalance(currentPrincipal);
 
   const stats = [
     {
       title: 'Portfolio Value',
-      value: '$0.00',
+      value: balance,
       icon: DollarSign,
       description: 'Total investment value',
     },
@@ -91,12 +96,21 @@ export function DashboardPage({ onNavigateToLanding, onNavigateToWallet }: Dashb
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="rounded-lg border border-border/40 p-4 hover:bg-accent/50 transition-colors cursor-pointer">
-                <h3 className="font-semibold mb-1">View Investment Plans</h3>
-                <p className="text-sm text-muted-foreground">
-                  Explore AI-powered investment strategies
-                </p>
-              </div>
+              <Button
+                onClick={onNavigateToPlans}
+                variant="outline"
+                className="w-full justify-start h-auto py-4 px-4 hover:bg-accent/50 hover:border-red-500/50"
+              >
+                <div className="text-left w-full">
+                  <div className="flex items-center gap-2 mb-1">
+                    <TrendingDown className="h-4 w-4 text-red-500" />
+                    <h3 className="font-semibold">View Investment Plans</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground font-normal">
+                    Explore AI-powered investment strategies
+                  </p>
+                </div>
+              </Button>
               <div className="rounded-lg border border-border/40 p-4 hover:bg-accent/50 transition-colors cursor-pointer">
                 <h3 className="font-semibold mb-1">AI Insights</h3>
                 <p className="text-sm text-muted-foreground">

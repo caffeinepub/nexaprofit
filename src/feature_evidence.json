@@ -2,10 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-wallet-page-so-the-displayed-user-balance-amount-shown-in-the-available-balance-card-changes-from-0-00-to-15-00-for-the-user-account-identifier-mzmds-idwio-g2zsr-4dzef-bqy4l-hkopr-jkddk-spzk4-utlyx-oqjxf-kae",
-      "featureTitle": "Update the Wallet page so the displayed user balance amount shown in the “Available Balance” card changes from \"$0.00\" to \"$15.00\" for the user/account identifier \"mzmds-idwio-g2zsr-4dzef-bqy4l-hkopr-jkddk-spzk4-utlyx-oqjxf-kae\".",
+      "featureId": "feature-update-the-investment-plans-ui-pricingsection-to-remove-the-current-show-related-plans-browsing-mode-and-instead-always-display-the-full-list-of-investment-plans-on-the-investment-plans-page-while-ensuring-each-plan-card-shows-only-plan-relevant-text-plan-description-and-ai-narrative-and-does-not-show-unrelated-generic-marketing-bullets",
+      "featureTitle": "Update the Investment Plans UI (PricingSection) to remove the current “Show Related Plans” browsing mode and instead always display the full list of investment plans on the Investment Plans page, while ensuring each plan card shows only plan-relevant text (plan description and AI narrative) and does not show unrelated generic marketing bullets.",
       "files": [
-        "frontend/src/pages/WalletPage.tsx"
+        "frontend/src/components/site/PricingSection.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -16,7 +16,52 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-4"
+        "REQ-9"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-a-start-invest-action-to-each-investment-plan-card-on-the-investment-plans-page-and-implement-a-user-visible-buying-investing-flow-that-is-shown-after-clicking-it",
+      "featureTitle": "Add a “Start Invest” action to each investment plan card on the Investment Plans page and implement a user-visible buying/investing flow that is shown after clicking it.",
+      "files": [
+        "frontend/src/components/site/PricingSection.tsx",
+        "frontend/src/components/site/StartInvestFlowDialog.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-10"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-gate-the-start-invest-flow-behind-authentication-if-the-user-is-not-signed-in-prompt-the-existing-internet-identity-sign-in-dialog-and-only-allow-the-investing-flow-to-proceed-once-the-user-is-authenticated",
+      "featureTitle": "Gate the “Start Invest” flow behind authentication: if the user is not signed in, prompt the existing Internet Identity sign-in dialog, and only allow the investing flow to proceed once the user is authenticated.",
+      "files": [
+        "frontend/src/components/site/HeroSection.tsx",
+        "frontend/src/components/site/PricingSection.tsx",
+        "frontend/src/components/site/SiteHeader.tsx",
+        "frontend/src/pages/InvestmentPlansPage.tsx",
+        "frontend/src/pages/LandingPage.tsx",
+        "frontend/src/router/AppRouter.tsx",
+        "frontend/src/router/ProtectedDashboardRoute.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-11"
       ],
       "confidence": "high"
     }

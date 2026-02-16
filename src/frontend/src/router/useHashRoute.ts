@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 
-export type Route = '/' | '/dashboard' | '/wallet';
+export type Route = '/' | '/dashboard' | '/wallet' | '/plans';
 
 export function useHashRoute() {
   const getRoute = (): Route => {
     const hash = window.location.hash.slice(1) || '/';
     if (hash === '/dashboard') return '/dashboard';
     if (hash === '/wallet') return '/wallet';
+    if (hash === '/plans') return '/plans';
     return '/';
   };
 

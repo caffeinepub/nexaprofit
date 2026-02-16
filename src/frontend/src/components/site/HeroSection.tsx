@@ -2,7 +2,7 @@ import { ArrowRight, TrendingUp, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface HeroSectionProps {
-  onOpenSignIn: () => void;
+  onOpenSignIn: (onSuccess?: () => void) => void;
 }
 
 export function HeroSection({ onOpenSignIn }: HeroSectionProps) {
@@ -58,7 +58,7 @@ export function HeroSection({ onOpenSignIn }: HeroSectionProps) {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
             <Button
               size="lg"
-              onClick={onOpenSignIn}
+              onClick={() => onOpenSignIn()}
               className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white shadow-lg shadow-red-500/30 group"
             >
               Get Started

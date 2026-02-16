@@ -6,7 +6,7 @@ import { LogIn, Loader2 } from 'lucide-react';
 interface ProtectedDashboardRouteProps {
   children: ReactNode;
   onNavigateToLanding: () => void;
-  onOpenSignIn: () => void;
+  onOpenSignIn: (onSuccess?: () => void) => void;
 }
 
 export function ProtectedDashboardRoute({
@@ -44,7 +44,7 @@ export function ProtectedDashboardRoute({
           </div>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Button
-              onClick={onOpenSignIn}
+              onClick={() => onOpenSignIn()}
               className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white"
               size="lg"
             >

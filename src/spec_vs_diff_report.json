@@ -1,23 +1,76 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-16T02:11:27.751Z",
-  "summary": "REQ-4 appears implemented by conditionally displaying \"$15.00\" in the Wallet page “Available Balance” card when the logged-in principal matches the specified identifier, otherwise showing \"$0.00\". No clear missing requirements from the provided diff summary, but some additional non-requested repository metadata files were modified.",
-  "missing_requirements": [],
-  "hallucinated_features": [
+  "generatedAt": "2026-02-16T07:51:28.341Z",
+  "summary": "The diff clearly implements an authenticated “Start Invest” in-app dialog flow wired through #/plans, but the evidence is truncated for parts of PricingSection, so removal of the old “Show Related Plans” mode and removal of generic bullet marketing content from plan cards cannot be fully verified from the provided snippets.",
+  "missing_requirements": [
     {
-      "description": "Modified repository metadata/summary files not requested by REQ-4 (frontend file summaries and project state tracking).",
-      "reason": "BuildRequest only asks for a UI display change in frontend/src/pages/WalletPage.tsx; changes to documentation/state tracking files are not part of the stated requirement.",
+      "id": "REQ-9",
+      "requirement": "Remove the current “Show Related Plans” browsing mode/state (no “Show Related Plans” button; no “Related Investment Plans” header mode/state) and always display the full list of plans on #/plans.",
+      "reason": "PricingSection is truncated before the full plan-card rendering; the diff excerpt does not explicitly show removal of a “Show Related Plans” button or the “Related Investment Plans” header/state, nor does it show the complete rendered list behavior.",
       "evidence": [
-        "frontend-file-summaries.txt",
-        "project_state.json"
+        "frontend/src/components/site/PricingSection.tsx (truncated)"
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "requirement": "Remove the generic hard-coded marketing bullet list from plan cards and show only plan-relevant text including plan.aiNarrative.",
+      "reason": "The provided PricingSection excerpt is truncated before the card content, so it does not show whether the hard-coded bullets were removed or whether plan.aiNarrative is rendered in each plan card.",
+      "evidence": [
+        "frontend/src/components/site/PricingSection.tsx (truncated)"
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "requirement": "Each plan card includes a clearly labeled “Start Invest” button, and the flow includes selecting/confirming the plan, entering amount, reviewing summary, confirming purchase, plus visible success and cancel/close actions returning to the plans list.",
+      "reason": "PricingSection’s card UI is truncated before button rendering; StartInvestFlowDialog shows step state and closing logic, but the excerpt is truncated before the footer/actions and review/summary UI, so the presence of a visible cancel button and complete review/confirm UI cannot be confirmed from the snippet alone.",
+      "evidence": [
+        "frontend/src/components/site/PricingSection.tsx (truncated)",
+        "frontend/src/components/site/StartInvestFlowDialog.tsx (truncated)"
       ]
     }
   ],
-  "confidence": 0.72,
+  "hallucinated_features": [
+    {
+      "description": "Added/modified Landing page CTA section and navigation to plans (marketing content) beyond the requested changes to #/plans PricingSection behavior and Start Invest flow.",
+      "reason": "BuildRequest focuses on simplifying Investment Plans content and adding an authenticated Start Invest flow on #/plans; Landing page CTA content is not requested in REQ-9/10/11.",
+      "evidence": [
+        "frontend/src/pages/LandingPage.tsx"
+      ]
+    },
+    {
+      "description": "Updated SiteHeader navigation links/behavior (scroll-to anchors) unrelated to the specified Investment Plans page requirements.",
+      "reason": "Not requested by REQ-9/10/11; changes appear to be general site navigation enhancements.",
+      "evidence": [
+        "frontend/src/components/site/SiteHeader.tsx"
+      ]
+    },
+    {
+      "description": "Updated HeroSection copy/styling and CTA behavior unrelated to the Investment Plans page requirements.",
+      "reason": "Not requested by REQ-9/10/11; appears to be general landing hero improvements.",
+      "evidence": [
+        "frontend/src/components/site/HeroSection.tsx"
+      ]
+    },
+    {
+      "description": "Changed ProtectedDashboardRoute to render a full-page authentication-required prompt instead of simply gating the route.",
+      "reason": "REQ-11 only requires gating the Start Invest flow behind existing Internet Identity sign-in; it does not request redesigning dashboard route protection UI.",
+      "evidence": [
+        "frontend/src/router/ProtectedDashboardRoute.tsx"
+      ]
+    }
+  ],
+  "confidence": 0.6,
   "changed_files": [
     "frontend-file-summaries.txt",
-    "frontend/src/pages/WalletPage.tsx",
+    "frontend/src/components/site/HeroSection.tsx",
+    "frontend/src/components/site/PricingSection.tsx",
+    "frontend/src/components/site/SiteHeader.tsx",
+    "frontend/src/components/site/StartInvestFlowDialog.tsx",
+    "frontend/src/pages/InvestmentPlansPage.tsx",
+    "frontend/src/pages/LandingPage.tsx",
+    "frontend/src/router/AppRouter.tsx",
+    "frontend/src/router/ProtectedDashboardRoute.tsx",
     "project_state.json"
   ]
 }

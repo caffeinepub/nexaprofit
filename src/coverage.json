@@ -1,24 +1,60 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-16T02:11:27.754Z",
+  "generatedAt": "2026-02-16T07:51:28.344Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 1,
-    "implemented": 1,
+    "total": 3,
+    "implemented": 3,
     "items": [
       {
-        "id": "REQ-4",
-        "summary": "Update the Wallet page so the displayed user balance amount shown in the “Available Balance” card changes from \"$0.00\" to \"$15.00\" for the user/account identifier \"mzmds-idwio-g2zsr-4dzef-bqy4l-hkopr-jkddk-spzk4-utlyx-oqjxf-kae\".",
+        "id": "REQ-10",
+        "summary": "Add a “Start Invest” action to each investment plan card on the Investment Plans page and implement a user-visible buying/investing flow that is shown after clicking it.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/WalletPage.tsx"
+          "frontend/src/components/site/StartInvestFlowDialog.tsx",
+          "frontend/src/components/site/PricingSection.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/pages/WalletPage.tsx"
+          "frontend/src/components/site/StartInvestFlowDialog.tsx",
+          "frontend/src/components/site/PricingSection.tsx"
+        ]
+      },
+      {
+        "id": "REQ-11",
+        "summary": "Gate the “Start Invest” flow behind authentication: if the user is not signed in, prompt the existing Internet Identity sign-in dialog, and only allow the investing flow to proceed once the user is authenticated.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/router/AppRouter.tsx",
+          "frontend/src/pages/InvestmentPlansPage.tsx",
+          "frontend/src/components/site/PricingSection.tsx",
+          "frontend/src/components/site/SiteHeader.tsx",
+          "frontend/src/pages/LandingPage.tsx",
+          "frontend/src/components/site/HeroSection.tsx",
+          "frontend/src/router/ProtectedDashboardRoute.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/router/AppRouter.tsx",
+          "frontend/src/pages/InvestmentPlansPage.tsx",
+          "frontend/src/components/site/PricingSection.tsx",
+          "frontend/src/components/site/SiteHeader.tsx",
+          "frontend/src/pages/LandingPage.tsx",
+          "frontend/src/components/site/HeroSection.tsx",
+          "frontend/src/router/ProtectedDashboardRoute.tsx"
+        ]
+      },
+      {
+        "id": "REQ-9",
+        "summary": "Update the Investment Plans UI (PricingSection) to remove the current “Show Related Plans” browsing mode and instead always display the full list of investment plans on the Investment Plans page, while ensuring each plan card shows only plan-relevant text (plan description and AI narrative) and does not show unrelated generic marketing bullets.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/site/PricingSection.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/site/PricingSection.tsx"
         ]
       }
     ]
@@ -28,7 +64,14 @@
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/pages/WalletPage.tsx",
+    "frontend/src/components/site/HeroSection.tsx",
+    "frontend/src/components/site/PricingSection.tsx",
+    "frontend/src/components/site/SiteHeader.tsx",
+    "frontend/src/components/site/StartInvestFlowDialog.tsx",
+    "frontend/src/pages/InvestmentPlansPage.tsx",
+    "frontend/src/pages/LandingPage.tsx",
+    "frontend/src/router/AppRouter.tsx",
+    "frontend/src/router/ProtectedDashboardRoute.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

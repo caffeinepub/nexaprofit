@@ -1,35 +1,75 @@
 {
   "kind": "build_request",
-  "title": "Update displayed wallet balance from $0.00 to $15.00",
+  "title": "Simplify Investment Plans content and add Start Invest buying flow",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-4",
-      "text": "Update the Wallet page so the displayed user balance amount shown in the “Available Balance” card changes from \"$0.00\" to \"$15.00\" for the user/account identifier \"mzmds-idwio-g2zsr-4dzef-bqy4l-hkopr-jkddk-spzk4-utlyx-oqjxf-kae\".",
+      "id": "REQ-9",
+      "text": "Update the Investment Plans UI (PricingSection) to remove the current “Show Related Plans” browsing mode and instead always display the full list of investment plans on the Investment Plans page, while ensuring each plan card shows only plan-relevant text (plan description and AI narrative) and does not show unrelated generic marketing bullets.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-user-1"
         ],
         "quotes": [
-          "mzmds-idwio-g2zsr-4dzef-bqy4l-hkopr-jkddk-spzk4-utlyx-oqjxf-kae \nChange  this is user balance 0.00$ to 15$"
+          "Remove, investment plans  show related plan text"
         ]
       },
       "acceptanceCriteria": [
-        "On the Wallet page (frontend/src/pages/WalletPage.tsx), the large balance value in the “Available Balance” card no longer displays “$0.00”.",
-        "The displayed balance for the specified user/account identifier reads “$15.00” (USD formatting with two decimals).",
-        "No other wallet UI text is changed, and all user-facing text remains in English."
+        "On #/plans, the plan cards no longer show a “Show Related Plans” button and there is no “Related Investment Plans” header mode/state.",
+        "All available plans render together in a consistent grid/list view.",
+        "Each plan card displays the plan’s name, description, weekly return, risk level, minimum investment range, and AI narrative (plan.aiNarrative).",
+        "The generic hard-coded bullet list (e.g., “AI-powered portfolio optimization”, “24/7 market monitoring”, “Real-time risk assessment”) is removed from the plan cards."
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "text": "Add a “Start Invest” action to each investment plan card on the Investment Plans page and implement a user-visible buying/investing flow that is shown after clicking it.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-user-1"
+        ],
+        "quotes": [
+          "add start invest and show buying process"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Each plan card includes a clearly labeled “Start Invest” button (English text).",
+        "Clicking “Start Invest” opens an in-app flow (modal or dedicated UI section) that guides the user through investing in the selected plan.",
+        "The flow includes, at minimum: selecting/confirming the plan, entering an investment amount, reviewing a summary, and confirming the purchase/invest action.",
+        "The flow includes visible success and cancel/close actions, and the UI returns to the plans list after completion or cancel."
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "text": "Gate the “Start Invest” flow behind authentication: if the user is not signed in, prompt the existing Internet Identity sign-in dialog, and only allow the investing flow to proceed once the user is authenticated.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-user-1"
+        ],
+        "quotes": [
+          "add start invest and show buying process"
+        ]
+      },
+      "acceptanceCriteria": [
+        "When not authenticated, clicking “Start Invest” triggers the existing sign-in dialog (no new auth system).",
+        "After a successful sign-in, the user can proceed to the investing flow for the selected plan without needing to navigate away from #/plans.",
+        "No changes are made to the immutable authentication hook files; integration is done by passing callbacks/props through existing editable components (e.g., InvestmentPlansPage -> PricingSection)."
       ]
     }
   ],
   "constraints": [
-    "Do not edit any files under frontend/src/components/ui (shadcn UI components are read-only).",
-    "Do not edit any immutable frontend paths listed in SYSTEM_CONTEXT (e.g., frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, frontend/src/main.tsx).",
-    "Keep the backend as a single Motoko actor; only add a migration if state upgrades are required (not required for a pure UI text change)."
+    "Frontend immutable paths must not be edited: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui.",
+    "Keep the backend as a single Motoko actor (backend/main.mo).",
+    "Use English for any user-facing text added or changed.",
+    "Do not add real payment processing or third-party integrations; the buying process must be an in-app UI flow only."
   ],
   "nonGoals": [
-    "Implementing real wallet accounting (deposits/withdrawals), transaction history, or backend persistence for balances.",
-    "Changing pricing section ranges or weekly return percentages (handled by existing features)."
+    "Implementing real deposits/withdrawals, card payments, crypto transfers, or Stripe integration.",
+    "Persisting investments/transactions to the backend or adding a full transaction history system (unless explicitly requested later).",
+    "Adding real-time updates (WebSockets) or push notifications."
   ],
   "imageRequirements": {
     "required": [],
