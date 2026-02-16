@@ -105,10 +105,10 @@ export interface AIInsight {
 }
 export interface InvestmentPlan {
     planId: string;
-    minimumInvestment: bigint;
     name: string;
+    minimumInvestmentRange: string;
     description: string;
-    monthlyReturn: number;
+    weeklyReturn: number;
     riskLevel: string;
     aiNarrative: string;
 }

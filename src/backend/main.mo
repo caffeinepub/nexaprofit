@@ -1,21 +1,26 @@
 import Map "mo:core/Map";
 import Text "mo:core/Text";
+import Float "mo:core/Float";
 import Array "mo:core/Array";
 import Iter "mo:core/Iter";
 import Order "mo:core/Order";
 import Runtime "mo:core/Runtime";
 import Principal "mo:core/Principal";
+
 import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
+
+
+// Explicitly specify migration function via with-clause
 
 actor {
   type InvestmentPlan = {
     planId : Text;
     name : Text;
     description : Text;
-    monthlyReturn : Float;
+    weeklyReturn : Float;
     riskLevel : Text;
-    minimumInvestment : Nat;
+    minimumInvestmentRange : Text;
     aiNarrative : Text;
   };
 
@@ -62,39 +67,41 @@ actor {
   // Investment Plans with Trends
   let investmentPlans = Map.empty<Text, InvestmentPlan>();
 
+  // Add three default investment plans with AI narratives and updated pricing range
+  let initialPlans = [] : [InvestmentPlan];
+
   // Add three default investment plans with AI narratives
-  let defaultPlans : [InvestmentPlan] = [
+  let newPlans : [InvestmentPlan] = [
     {
       planId = "plan1";
       name = "Balanced Growth Portfolio";
       description = "A diversified portfolio aiming for steady long-term growth.";
-      monthlyReturn = 1.25;
+      weeklyReturn = 0.385;
       riskLevel = "Medium";
-      minimumInvestment = 1000;
+      minimumInvestmentRange = "$51 - $200";
       aiNarrative = "AI projection indicates a 74.2% probability of achieving above-market returns within the next 18 months, based on current trend analysis and sentiment index.";
     },
     {
       planId = "plan2";
       name = "High-Yield Equities Focus";
       description = "Focuses on high-performing equities with robust growth potential.";
-      monthlyReturn = 2.05;
+      weeklyReturn = 0.49;
       riskLevel = "High";
-      minimumInvestment = 2500;
+      minimumInvestmentRange = "$201 - $1000";
       aiNarrative = "Sentiment signals suggest short-term volatility with a positive bias. Adaptive AI insights recommend sector rotation as a strategy for enhanced resilience.";
     },
     {
       planId = "plan3";
       name = "Conservative Income Plan";
       description = "A risk-mitigated plan prioritizing stable, recurring yields.";
-      monthlyReturn = 0.8;
+      weeklyReturn = 0.28;
       riskLevel = "Low";
-      minimumInvestment = 500;
+      minimumInvestmentRange = "$10 - $50";
       aiNarrative = "Trend stability indicator at 93% confirms high resilience. AI-driven scenario analysis predicts consistent negative correlation with market fluctuations.";
     },
   ];
 
-  // Populate initial plans using forEach
-  defaultPlans.forEach(
+  newPlans.forEach(
     func(plan) { investmentPlans.add(plan.planId, plan) }
   );
 
@@ -131,7 +138,6 @@ actor {
     },
   ];
 
-  // Populate initial insights using forEach
   let defaultInsightKeys = ["insight1", "insight2", "insight3"];
   for (i in defaultInsights.keys()) {
     let key = if (i < defaultInsightKeys.size()) { defaultInsightKeys[i] : Text } else { "" };
@@ -206,3 +212,4 @@ actor {
     userProfiles.add(caller, profile);
   };
 };
+

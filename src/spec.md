@@ -1,11 +1,10 @@
 # Specification
 
 ## Summary
-**Goal:** Add a Dashboard button that navigates to a new Wallet hash route, and create a basic Wallet page with navigation back to the Dashboard.
+**Goal:** Update the Wallet page “Available Balance” display so the specified user/account shows $15.00 instead of $0.00.
 
 **Planned changes:**
-- Update only the user-selected Dashboard button so its visible label is exactly "Go to Wallet" and clicking it navigates to the Wallet hash route (e.g., #/wallet).
-- Add a new "/wallet" hash route and render a new Wallet page component for it.
-- On the Wallet page, display a clear "Wallet" title and provide a "Back to Dashboard" in-app navigation option.
+- Update `frontend/src/pages/WalletPage.tsx` to display “$15.00” (two-decimal USD formatting) for user/account identifier `mzmds-idwio-g2zsr-4dzef-bqy4l-hkopr-jkddk-spzk4-utlyx-oqjxf-kae`.
+- Ensure no other wallet UI text is changed and all user-facing text remains in English.
 
-**User-visible outcome:** Users can click "Go to Wallet" from the Dashboard to open the Wallet page, then use "Back to Dashboard" to return.
+**User-visible outcome:** On the Wallet page, the “Available Balance” card shows “$15.00” (instead of “$0.00”) for the specified account.

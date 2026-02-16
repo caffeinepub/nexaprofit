@@ -2,12 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-add-a-new-wallet-route-to-the-hash-router-and-render-a-new-wallet-page-when-the-route-is-active",
-      "featureTitle": "Add a new Wallet route to the hash router and render a new Wallet page when the route is active.",
+      "featureId": "feature-update-the-wallet-page-so-the-displayed-user-balance-amount-shown-in-the-available-balance-card-changes-from-0-00-to-15-00-for-the-user-account-identifier-mzmds-idwio-g2zsr-4dzef-bqy4l-hkopr-jkddk-spzk4-utlyx-oqjxf-kae",
+      "featureTitle": "Update the Wallet page so the displayed user balance amount shown in the “Available Balance” card changes from \"$0.00\" to \"$15.00\" for the user/account identifier \"mzmds-idwio-g2zsr-4dzef-bqy4l-hkopr-jkddk-spzk4-utlyx-oqjxf-kae\".",
       "files": [
-        "frontend/src/pages/WalletPage.tsx",
-        "frontend/src/router/AppRouter.tsx",
-        "frontend/src/router/useHashRoute.ts"
+        "frontend/src/pages/WalletPage.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -18,7 +16,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-2"
+        "REQ-4"
       ],
       "confidence": "high"
     }

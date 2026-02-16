@@ -28,7 +28,7 @@ export function DashboardPage({ onNavigateToLanding, onNavigateToWallet }: Dashb
       description: 'Currently active',
     },
     {
-      title: 'Monthly Return',
+      title: 'Weekly Return',
       value: '0%',
       icon: TrendingUp,
       description: 'This month',

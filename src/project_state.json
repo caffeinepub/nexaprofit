@@ -1,18 +1,32 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 3,
-  "summary": "New project",
-  "architectural_notes": [
-    "Email-sending functionality is currently disabled/unavailable (only supported for paid subscribers)."
-  ],
+  "projectStateVersion": 7,
+  "summary": "Update displayed values in the UI (pricing section ranges/percentages and user balance display).",
+  "architectural_notes": [],
   "known_issues": [],
   "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-add-a-new-wallet-route-to-the-hash-router-and-render-a-new-wallet-page-when-the-route-is-active",
-      "title": "Add a new Wallet route to the hash router and render a new Wallet page when the route is active.",
+      "id": "feature-update-the-three-displayed-weekly-return-percentage-values-shown-in-the-pricing-section-plan-cards-the-three-selected-span-elements-so-they-read-respectively-38-5-49-and-28",
+      "title": "Update the three displayed weekly return percentage values shown in the Pricing section plan cards (the three selected <span> elements) so they read, respectively: \"38.5%\", \"49%\", and \"28%\".",
       "reqIds": [
         "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-three-pricing-section-plan-cards-display-the-minimum-investment-ranges-respectively-as-51-200-201-1000-and-10-50",
+      "title": "Ensure the three Pricing section plan cards display the minimum investment ranges, respectively, as: \"$51 - $200\", \"$201 - $1000\", and \"$10 - $50\".",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-the-wallet-page-so-the-displayed-user-balance-amount-shown-in-the-available-balance-card-changes-from-0-00-to-15-00-for-the-user-account-identifier-mzmds-idwio-g2zsr-4dzef-bqy4l-hkopr-jkddk-spzk4-utlyx-oqjxf-kae",
+      "title": "Update the Wallet page so the displayed user balance amount shown in the “Available Balance” card changes from \"$0.00\" to \"$15.00\" for the user/account identifier \"mzmds-idwio-g2zsr-4dzef-bqy4l-hkopr-jkddk-spzk4-utlyx-oqjxf-kae\".",
+      "reqIds": [
+        "REQ-4"
       ],
       "version": 1
     }
@@ -20,26 +34,32 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Add a button on the Dashboard that navigates to the Wallet page",
+      "summary": "Update the three pricing ranges to: $51–$200, $201–$1000, and $10–$50 (respectively)",
       "reqIds": [],
       "status": "pending"
     },
     {
       "id": "AR-2",
-      "summary": "On button click, send an email notification to payakash22@gmail.com",
-      "reqIds": [],
-      "status": "blocked"
-    },
-    {
-      "id": "AR-3",
-      "summary": "Update ONLY the selected button element (XPath: /html[1]/body[1]/div[1]/div[1]/section[7]/div[1]/div[2]/div[1]/div[2]/form[1]/button[1]) so the visible label reads exactly \"Go to Wallet\" (English) and clicking it navigates the user to the Wallet page/route.",
+      "summary": "Update the minimum investment range text for the three investment plans so the Pricing section displays these values respectively for the three plan cards (matching the three selected page elements):\n1) \"$51 - $200\"\n2) \"$201 - $1000\"\n3) \"$10 - $50\"",
       "reqIds": [
         "REQ-1"
       ],
       "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Update the three displayed percentage values (for the three corresponding pricing/investment plan cards) to: 38.5%, 49%, and 28% respectively",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Change the displayed user balance from $0.00 to $15 for user/account identifier \"mzmds-idwio-g2zsr-4dzef-bqy4l-hkopr-jkddk-spzk4-utlyx-oqjxf-kae\"",
+      "reqIds": [],
+      "status": "pending"
     }
   ],
-  "projectName": "Add Wallet navigation via selected button and create Wallet route/page",
+  "projectName": "Update displayed minimum investment ranges for the three pricing cards",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

@@ -2,6 +2,7 @@ import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Wallet, ArrowLeft, DollarSign, TrendingUp, Clock } from 'lucide-react';
+import { useInternetIdentity } from '@/hooks/useInternetIdentity';
 
 interface WalletPageProps {
   onNavigateToLanding: () => void;
@@ -9,6 +10,13 @@ interface WalletPageProps {
 }
 
 export function WalletPage({ onNavigateToLanding, onNavigateToDashboard }: WalletPageProps) {
+  const { identity } = useInternetIdentity();
+
+  // Check if the current user matches the specified account identifier
+  const currentPrincipal = identity?.getPrincipal().toString();
+  const targetPrincipal = 'mzmds-idwio-g2zsr-4dzef-bqy4l-hkopr-jkddk-spzk4-utlyx-oqjxf-kae';
+  const balance = currentPrincipal === targetPrincipal ? '15.00' : '0.00';
+
   return (
     <div className="min-h-screen bg-background">
       <DashboardHeader onNavigateToLanding={onNavigateToLanding} />
@@ -45,7 +53,7 @@ export function WalletPage({ onNavigateToLanding, onNavigateToDashboard }: Walle
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="text-5xl font-bold">$0.00</div>
+              <div className="text-5xl font-bold">${balance}</div>
               <div className="flex gap-4">
                 <Button className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800">
                   <DollarSign className="mr-2 h-4 w-4" />

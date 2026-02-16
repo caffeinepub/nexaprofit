@@ -29,10 +29,10 @@ export const UserProfile = IDL.Record({
 });
 export const InvestmentPlan = IDL.Record({
   'planId' : IDL.Text,
-  'minimumInvestment' : IDL.Nat,
   'name' : IDL.Text,
+  'minimumInvestmentRange' : IDL.Text,
   'description' : IDL.Text,
-  'monthlyReturn' : IDL.Float64,
+  'weeklyReturn' : IDL.Float64,
   'riskLevel' : IDL.Text,
   'aiNarrative' : IDL.Text,
 });
@@ -84,10 +84,10 @@ export const idlFactory = ({ IDL }) => {
   });
   const InvestmentPlan = IDL.Record({
     'planId' : IDL.Text,
-    'minimumInvestment' : IDL.Nat,
     'name' : IDL.Text,
+    'minimumInvestmentRange' : IDL.Text,
     'description' : IDL.Text,
-    'monthlyReturn' : IDL.Float64,
+    'weeklyReturn' : IDL.Float64,
     'riskLevel' : IDL.Text,
     'aiNarrative' : IDL.Text,
   });

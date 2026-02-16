@@ -1,55 +1,35 @@
 {
   "kind": "build_request",
-  "title": "Add Wallet navigation via selected button and create Wallet route/page",
+  "title": "Update displayed wallet balance from $0.00 to $15.00",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-1",
-      "text": "Update ONLY the selected button element (XPath: /html[1]/body[1]/div[1]/div[1]/section[7]/div[1]/div[2]/div[1]/div[2]/form[1]/button[1]) so the visible label reads exactly \"Go to Wallet\" (English) and clicking it navigates the user to the Wallet page/route.",
+      "id": "REQ-4",
+      "text": "Update the Wallet page so the displayed user balance amount shown in the “Available Balance” card changes from \"$0.00\" to \"$15.00\" for the user/account identifier \"mzmds-idwio-g2zsr-4dzef-bqy4l-hkopr-jkddk-spzk4-utlyx-oqjxf-kae\".",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-4"
         ],
         "quotes": [
-          "Add  button to Dashboard for go to Wallet",
-          "The user has selected the following 1 element from the page for context... XPath: /html[1]/body[1]/div[1]/div[1]/section[7]/div[1]/div[2]/div[1]/div[2]/form[1]/button[1]"
+          "mzmds-idwio-g2zsr-4dzef-bqy4l-hkopr-jkddk-spzk4-utlyx-oqjxf-kae \nChange  this is user balance 0.00$ to 15$"
         ]
       },
       "acceptanceCriteria": [
-        "Only the selected button’s text/behavior changes; no other UI text/buttons are modified.",
-        "The selected button’s visible text is exactly \"Go to Wallet\".",
-        "Clicking the selected button navigates to the Wallet route using the app’s hash routing (e.g., #/wallet)."
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "text": "Add a new Wallet route to the hash router and render a new Wallet page when the route is active.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "Add  button to Dashboard for go to Wallet"
-        ]
-      },
-      "acceptanceCriteria": [
-        "The router supports navigating to \"/wallet\" (hash route).",
-        "Navigating to #/wallet renders a Wallet page component.",
-        "The Wallet page has a clear title (\"Wallet\") and provides an in-app way to return to the Dashboard (\"Back to Dashboard\")."
+        "On the Wallet page (frontend/src/pages/WalletPage.tsx), the large balance value in the “Available Balance” card no longer displays “$0.00”.",
+        "The displayed balance for the specified user/account identifier reads “$15.00” (USD formatting with two decimals).",
+        "No other wallet UI text is changed, and all user-facing text remains in English."
       ]
     }
   ],
   "constraints": [
-    "Apply changes ONLY to the user-selected element for the button update (XPath provided).",
-    "Use English for any user-facing text.",
-    "Do not modify files under frontend/src/components/ui or other frontend immutablePaths.",
-    "Do not implement sending emails (including to payakash22@gmail.com), as email features are not supported in this project."
+    "Do not edit any files under frontend/src/components/ui (shadcn UI components are read-only).",
+    "Do not edit any immutable frontend paths listed in SYSTEM_CONTEXT (e.g., frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useActor.ts, frontend/src/main.tsx).",
+    "Keep the backend as a single Motoko actor; only add a migration if state upgrades are required (not required for a pure UI text change)."
   ],
   "nonGoals": [
-    "Implementing email notifications on button click.",
-    "Implementing real wallet functionality (balances, transactions, deposits/withdrawals), unless explicitly requested later."
+    "Implementing real wallet accounting (deposits/withdrawals), transaction history, or backend persistence for balances.",
+    "Changing pricing section ranges or weekly return percentages (handled by existing features)."
   ],
   "imageRequirements": {
     "required": [],
