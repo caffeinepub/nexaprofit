@@ -18,6 +18,7 @@ export function PricingSection({ onOpenSignIn }: PricingSectionProps) {
   const { data: plans, isLoading, error } = useInvestmentPlans();
   const { identity } = useInternetIdentity();
   const [selectedPlan, setSelectedPlan] = useState<InvestmentPlan | null>(null);
+  const [selectedPlanWeeklyReturn, setSelectedPlanWeeklyReturn] = useState<string>('');
   const [isInvestDialogOpen, setIsInvestDialogOpen] = useState(false);
 
   const getRiskColor = (risk: string) => {
@@ -28,35 +29,48 @@ export function PricingSection({ onOpenSignIn }: PricingSectionProps) {
         return 'text-yellow-500 border-yellow-500/30 bg-yellow-500/10';
       case 'high':
         return 'text-red-500 border-red-500/30 bg-red-500/10';
+      case 'none':
+        return 'text-gray-500 border-gray-500/30 bg-gray-500/10';
       default:
         return 'text-gray-500 border-gray-500/30 bg-gray-500/10';
     }
   };
 
-  const handleStartInvest = (plan: InvestmentPlan) => {
+  const handleStartInvest = (plan: InvestmentPlan, weeklyReturnDisplay: string) => {
     if (!identity) {
       // User not authenticated, trigger sign-in with callback
       if (onOpenSignIn) {
         onOpenSignIn(() => {
           // After successful sign-in, open the invest dialog
           setSelectedPlan(plan);
+          setSelectedPlanWeeklyReturn(weeklyReturnDisplay);
           setIsInvestDialogOpen(true);
         });
       }
     } else {
       // User authenticated, open invest dialog directly
       setSelectedPlan(plan);
+      setSelectedPlanWeeklyReturn(weeklyReturnDisplay);
       setIsInvestDialogOpen(true);
     }
   };
 
-  const formatWeeklyReturn = (plan: InvestmentPlan, index: number): string => {
-    // Format with decimal for plan1
-    if (index === 0 && plan.planId === 'plan1') {
-      return (plan.weeklyReturn * 100).toFixed(1);
-    }
-    return (plan.weeklyReturn * 100).toFixed(0);
+  const getWeeklyReturnDisplay = (plan: InvestmentPlan): string => {
+    // Convert decimal to percentage and round to nearest integer
+    const percentage = Math.round(plan.weeklyReturn * 100);
+    return percentage.toString();
   };
+
+  // Find the plan with the highest weekly return for the "Popular" badge
+  const getPopularPlanId = (plans: InvestmentPlan[]): string | null => {
+    if (!plans || plans.length === 0) return null;
+    const maxPlan = plans.reduce((max, plan) => 
+      plan.weeklyReturn > max.weeklyReturn ? plan : max
+    );
+    return maxPlan.planId;
+  };
+
+  const popularPlanId = plans ? getPopularPlanId(plans) : null;
 
   return (
     <>
@@ -74,8 +88,8 @@ export function PricingSection({ onOpenSignIn }: PricingSectionProps) {
           </div>
 
           {isLoading && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[...Array(3)].map((_, i) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[...Array(4)].map((_, i) => (
                 <Card key={i} className="bg-card/50 backdrop-blur">
                   <CardHeader>
                     <Skeleton className="h-6 w-3/4 mb-2" />
@@ -97,9 +111,10 @@ export function PricingSection({ onOpenSignIn }: PricingSectionProps) {
           )}
 
           {plans && plans.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {plans.map((plan, index) => {
-                const isPopular = index === 1;
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {plans.map((plan) => {
+                const isPopular = plan.planId === popularPlanId;
+                const weeklyReturnDisplay = getWeeklyReturnDisplay(plan);
                 return (
                   <Card
                     key={plan.planId}
@@ -123,7 +138,7 @@ export function PricingSection({ onOpenSignIn }: PricingSectionProps) {
                       <div className="space-y-2">
                         <div className="flex items-baseline gap-2">
                           <span className="text-4xl font-bold text-red-500">
-                            {formatWeeklyReturn(plan, index)}%
+                            {weeklyReturnDisplay}%
                           </span>
                           <span className="text-muted-foreground">/week</span>
                         </div>
@@ -154,7 +169,7 @@ export function PricingSection({ onOpenSignIn }: PricingSectionProps) {
                             : ''
                         }`}
                         variant={isPopular ? 'default' : 'outline'}
-                        onClick={() => handleStartInvest(plan)}
+                        onClick={() => handleStartInvest(plan, weeklyReturnDisplay)}
                       >
                         Start Invest
                       </Button>
@@ -171,6 +186,7 @@ export function PricingSection({ onOpenSignIn }: PricingSectionProps) {
         open={isInvestDialogOpen}
         onOpenChange={setIsInvestDialogOpen}
         plan={selectedPlan}
+        weeklyReturnDisplay={selectedPlanWeeklyReturn}
       />
     </>
   );

@@ -12,21 +12,31 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { CheckCircle2, TrendingUp, AlertCircle } from 'lucide-react';
+import { CheckCircle2, TrendingUp, AlertCircle, Wallet, Loader2 } from 'lucide-react';
 import type { InvestmentPlan } from '../../backend';
+import { useGetCallerWalletBalance, usePurchaseInvestmentPlan } from '../../hooks/useWallet';
+import { formatBalanceUSD } from '../../utils/availableBalance';
 
 interface StartInvestFlowDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   plan: InvestmentPlan | null;
+  weeklyReturnDisplay: string;
 }
 
 type FlowStep = 'confirm' | 'amount' | 'review' | 'success';
 
-export function StartInvestFlowDialog({ open, onOpenChange, plan }: StartInvestFlowDialogProps) {
+export function StartInvestFlowDialog({ open, onOpenChange, plan, weeklyReturnDisplay }: StartInvestFlowDialogProps) {
   const [step, setStep] = useState<FlowStep>('confirm');
   const [amount, setAmount] = useState('');
   const [error, setError] = useState('');
+
+  // Fetch wallet balance from backend
+  const { data: balanceData, isLoading: balanceLoading, error: balanceError } = useGetCallerWalletBalance();
+  const availableBalance = balanceData ?? 0;
+
+  // Purchase mutation
+  const purchaseMutation = usePurchaseInvestmentPlan();
 
   const handleClose = () => {
     onOpenChange(false);
@@ -35,10 +45,11 @@ export function StartInvestFlowDialog({ open, onOpenChange, plan }: StartInvestF
       setStep('confirm');
       setAmount('');
       setError('');
+      purchaseMutation.reset();
     }, 200);
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (step === 'confirm') {
       setStep('amount');
     } else if (step === 'amount') {
@@ -48,15 +59,32 @@ export function StartInvestFlowDialog({ open, onOpenChange, plan }: StartInvestF
         setError('Please enter a valid amount');
         return;
       }
+      // Check if amount exceeds available balance
+      if (numAmount > availableBalance) {
+        setError("Wallet doesn't have enough balance");
+        return;
+      }
       setError('');
       setStep('review');
     } else if (step === 'review') {
-      setStep('success');
+      // Call backend to purchase the plan
+      if (!plan) return;
+      
+      const numAmount = parseFloat(amount);
+      try {
+        await purchaseMutation.mutateAsync({ planId: plan.planId, amount: numAmount });
+        setStep('success');
+      } catch (err: any) {
+        // Show error message
+        const errorMessage = err?.message || 'Failed to purchase investment plan';
+        setError(errorMessage);
+      }
     }
   };
 
   const handleBack = () => {
     setError('');
+    purchaseMutation.reset();
     if (step === 'amount') {
       setStep('confirm');
     } else if (step === 'review') {
@@ -100,7 +128,7 @@ export function StartInvestFlowDialog({ open, onOpenChange, plan }: StartInvestF
                 <div>
                   <div className="text-sm text-muted-foreground mb-1">Weekly Return</div>
                   <div className="text-2xl font-bold text-red-500">
-                    {(plan.weeklyReturn * 100).toFixed(1)}%
+                    {weeklyReturnDisplay}%
                   </div>
                 </div>
                 <div>
@@ -141,6 +169,19 @@ export function StartInvestFlowDialog({ open, onOpenChange, plan }: StartInvestF
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
+              <div className="bg-muted/30 p-3 rounded-lg flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Wallet className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground">Available Balance</span>
+                </div>
+                {balanceLoading ? (
+                  <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                ) : balanceError ? (
+                  <span className="text-sm text-destructive">Error loading balance</span>
+                ) : (
+                  <span className="text-lg font-semibold">{formatBalanceUSD(availableBalance)}</span>
+                )}
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="amount">Investment Amount ($)</Label>
                 <Input
@@ -154,6 +195,7 @@ export function StartInvestFlowDialog({ open, onOpenChange, plan }: StartInvestF
                   }}
                   min="0"
                   step="0.01"
+                  disabled={balanceLoading}
                 />
                 {error && (
                   <div className="flex items-center gap-2 text-sm text-destructive">
@@ -171,7 +213,11 @@ export function StartInvestFlowDialog({ open, onOpenChange, plan }: StartInvestF
               <Button variant="outline" onClick={handleBack}>
                 Back
               </Button>
-              <Button onClick={handleNext} className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white">
+              <Button 
+                onClick={handleNext} 
+                disabled={balanceLoading}
+                className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white"
+              >
                 Review Investment
               </Button>
             </DialogFooter>
@@ -200,7 +246,7 @@ export function StartInvestFlowDialog({ open, onOpenChange, plan }: StartInvestF
                 <Separator />
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-muted-foreground">Weekly Return Rate</span>
-                  <span className="font-medium text-red-500">{(plan.weeklyReturn * 100).toFixed(1)}%</span>
+                  <span className="font-medium text-red-500">{weeklyReturnDisplay}%</span>
                 </div>
                 <Separator />
                 <div className="flex justify-between items-center">
@@ -210,19 +256,32 @@ export function StartInvestFlowDialog({ open, onOpenChange, plan }: StartInvestF
                   </span>
                 </div>
               </div>
-              <div className="bg-yellow-500/10 border border-yellow-500/30 p-3 rounded-lg">
-                <div className="text-xs text-yellow-600 dark:text-yellow-500">
-                  <AlertCircle className="h-3 w-3 inline mr-1" />
-                  This is a demonstration flow. No actual investment will be processed.
+              {error && (
+                <div className="bg-destructive/10 border border-destructive/30 p-3 rounded-lg">
+                  <div className="text-sm text-destructive flex items-center gap-2">
+                    <AlertCircle className="h-4 w-4" />
+                    {error}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={handleBack}>
+              <Button variant="outline" onClick={handleBack} disabled={purchaseMutation.isPending}>
                 Back
               </Button>
-              <Button onClick={handleNext} className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white">
-                Confirm Investment
+              <Button 
+                onClick={handleNext} 
+                disabled={purchaseMutation.isPending}
+                className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white"
+              >
+                {purchaseMutation.isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  'Confirm Investment'
+                )}
               </Button>
             </DialogFooter>
           </>
@@ -254,14 +313,12 @@ export function StartInvestFlowDialog({ open, onOpenChange, plan }: StartInvestF
                   <span className="font-medium">{plan.name}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Amount</span>
+                  <span className="text-muted-foreground">Amount Invested</span>
                   <span className="font-medium">${parseFloat(amount).toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Expected Weekly Return</span>
-                  <span className="font-medium text-green-500">
-                    ${(parseFloat(amount) * plan.weeklyReturn).toFixed(2)}
-                  </span>
+                  <span className="text-muted-foreground">Weekly Return</span>
+                  <span className="font-medium text-red-500">{weeklyReturnDisplay}%</span>
                 </div>
               </div>
             </div>

@@ -79,7 +79,7 @@ export function HeroSection({ onOpenSignIn }: HeroSectionProps) {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-8 pt-12 max-w-2xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6 md:gap-8 pt-12 max-w-4xl mx-auto">
             <div className="space-y-2">
               <div className="text-3xl md:text-4xl font-bold text-red-500">98%</div>
               <div className="text-sm text-muted-foreground">Accuracy Rate</div>
@@ -91,6 +91,14 @@ export function HeroSection({ onOpenSignIn }: HeroSectionProps) {
             <div className="space-y-2">
               <div className="text-3xl md:text-4xl font-bold text-red-500">$2B+</div>
               <div className="text-sm text-muted-foreground">Assets Analyzed</div>
+            </div>
+            <div className="space-y-2">
+              <div className="text-2xl md:text-3xl font-bold text-red-500">2026/02/20</div>
+              <div className="text-sm text-muted-foreground">Project Start Date</div>
+            </div>
+            <div className="space-y-2">
+              <div className="text-3xl md:text-4xl font-bold text-red-500">2458</div>
+              <div className="text-sm text-muted-foreground">People</div>
             </div>
           </div>
         </div>

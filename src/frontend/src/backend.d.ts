@@ -42,13 +42,22 @@ export enum UserRole {
 }
 export interface backendInterface {
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    creditUserWallet(user: Principal, amount: number): Promise<void>;
     getAIInsights(): Promise<Array<AIInsight>>;
+    getCallerNumber(): Promise<bigint>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
+    getCallerWalletBalance(): Promise<number | null>;
+    getCallerWeeklyReturn(): Promise<number | null>;
     getInvestmentPlans(): Promise<Array<InvestmentPlan>>;
     getLeads(): Promise<Array<Lead>>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
+    getUserWalletBalance(user: Principal): Promise<number | null>;
+    getUserWeeklyReturn(user: Principal): Promise<number | null>;
+    initializeCallerWallet(): Promise<void>;
     isCallerAdmin(): Promise<boolean>;
+    purchaseInvestmentPlan(planId: string, investmentAmount: number): Promise<void>;
+    registerUser(number: bigint): Promise<void>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
     submitLead(name: string, email: string, message: string): Promise<void>;
 }

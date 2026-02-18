@@ -1,20 +1,22 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useHashRoute } from './useHashRoute';
 import { LandingPage } from '@/pages/LandingPage';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { WalletPage } from '@/pages/WalletPage';
 import { InvestmentPlansPage } from '@/pages/InvestmentPlansPage';
+import { MyProfilePage } from '@/pages/MyProfilePage';
 import { ProtectedDashboardRoute } from './ProtectedDashboardRoute';
 import { InternetIdentityRegistrationDialog } from '@/components/auth/InternetIdentityRegistrationDialog';
+import { useInactivityTimeout } from '@/hooks/useInactivityTimeout';
 
 export function AppRouter() {
   const { route, navigate } = useHashRoute();
   const [isSignInOpen, setIsSignInOpen] = useState(false);
   const [signInSuccessCallback, setSignInSuccessCallback] = useState<(() => void) | undefined>(undefined);
 
-  const handleNavigateToDashboard = () => {
+  const handleNavigateToDashboard = useCallback(() => {
     navigate('/dashboard');
-  };
+  }, [navigate]);
 
   const handleNavigateToLanding = () => {
     navigate('/');
@@ -26,6 +28,10 @@ export function AppRouter() {
 
   const handleNavigateToPlans = () => {
     navigate('/plans');
+  };
+
+  const handleNavigateToProfile = () => {
+    navigate('/profile');
   };
 
   const handleOpenSignIn = (onSuccess?: () => void) => {
@@ -43,6 +49,12 @@ export function AppRouter() {
       handleNavigateToDashboard();
     }
   };
+
+  // Apply inactivity timeout to all routes except '/' and '/dashboard'
+  useInactivityTimeout({
+    currentRoute: route,
+    onTimeout: handleNavigateToDashboard,
+  });
 
   return (
     <>
@@ -62,6 +74,7 @@ export function AppRouter() {
             onNavigateToLanding={handleNavigateToLanding}
             onNavigateToWallet={handleNavigateToWallet}
             onNavigateToPlans={handleNavigateToPlans}
+            onNavigateToProfile={handleNavigateToProfile}
           />
         </ProtectedDashboardRoute>
       )}
@@ -81,6 +94,17 @@ export function AppRouter() {
           onNavigateToDashboard={handleNavigateToDashboard}
           onOpenSignIn={handleOpenSignIn}
         />
+      )}
+      {route === '/profile' && (
+        <ProtectedDashboardRoute
+          onNavigateToLanding={handleNavigateToLanding}
+          onOpenSignIn={handleOpenSignIn}
+        >
+          <MyProfilePage 
+            onNavigateToLanding={handleNavigateToLanding}
+            onNavigateToDashboard={handleNavigateToDashboard}
+          />
+        </ProtectedDashboardRoute>
       )}
       <InternetIdentityRegistrationDialog
         open={isSignInOpen}

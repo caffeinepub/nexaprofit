@@ -1,88 +1,32 @@
 {
   "schemaVersion": "1.0.0",
-  "projectStateVersion": 13,
-  "summary": "Update displayed values in the UI (pricing section ranges/percentages and ensure Wallet balance matches Dashboard balance display), add navigation changes to access investment plans via a button and a dedicated page, and enhance the Investment Plans page with plan-related text plus a Start Invest flow to guide users through buying/investing.",
+  "projectStateVersion": 3,
+  "summary": "New project",
   "architectural_notes": [],
   "known_issues": [],
   "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-update-the-three-displayed-weekly-return-percentage-values-shown-in-the-pricing-section-plan-cards-the-three-selected-span-elements-so-they-read-respectively-38-5-49-and-28",
-      "title": "Update the three displayed weekly return percentage values shown in the Pricing section plan cards (the three selected <span> elements) so they read, respectively: \"38.5%\", \"49%\", and \"28%\".",
+      "id": "feature-create-a-new-authenticated-my-profile-page-that-displays-the-signed-in-user-s-name-and-registered-email-from-the-existing-caller-user-profile-and-also-displays-the-user-s-internet-identity-uid-principal",
+      "title": "Create a new authenticated \"My Profile\" page that displays the signed-in user’s Name and registered Email from the existing caller user profile, and also displays the user’s Internet Identity UID (principal).",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-dedicated-backend-query-method-that-returns-a-stable-deterministic-unique-number-for-the-authenticated-caller-derived-from-the-caller-principal-and-display-this-number-on-the-my-profile-page-labeled-as-unique-number",
+      "title": "Add a dedicated backend query method that returns a stable, deterministic \"unique number\" for the authenticated caller (derived from the caller principal), and display this number on the My Profile page labeled as \"Unique Number\".",
       "reqIds": [
         "REQ-2"
       ],
       "version": 1
     },
     {
-      "id": "feature-ensure-the-three-pricing-section-plan-cards-display-the-minimum-investment-ranges-respectively-as-51-200-201-1000-and-10-50",
-      "title": "Ensure the three Pricing section plan cards display the minimum investment ranges, respectively, as: \"$51 - $200\", \"$201 - $1000\", and \"$10 - $50\".",
+      "id": "feature-add-navigation-to-the-new-my-profile-page-from-the-authenticated-area-dashboard-header-or-dashboard-page-actions-and-add-a-new-hash-route-e-g-profile-wired-into-the-existing-router",
+      "title": "Add navigation to the new My Profile page from the authenticated area (Dashboard header or dashboard page actions) and add a new hash route (e.g., \"/profile\") wired into the existing router.",
       "reqIds": [
         "REQ-3"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-update-the-wallet-page-so-the-displayed-user-balance-amount-shown-in-the-available-balance-card-changes-from-0-00-to-15-00-for-the-user-account-identifier-mzmds-idwio-g2zsr-4dzef-bqy4l-hkopr-jkddk-spzk4-utlyx-oqjxf-kae",
-      "title": "Update the Wallet page so the displayed user balance amount shown in the “Available Balance” card changes from \"$0.00\" to \"$15.00\" for the user/account identifier \"mzmds-idwio-g2zsr-4dzef-bqy4l-hkopr-jkddk-spzk4-utlyx-oqjxf-kae\".",
-      "reqIds": [
-        "REQ-4"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-update-the-authenticated-dashboard-page-so-the-displayed-balance-on-the-dashboard-matches-is-equal-to-the-wallet-page-available-balance-for-the-currently-signed-in-user-account-using-the-same-principal-based-balance-logic-already-used-in-the-wallet-page-including-the-special-case-principal-mzmds-idwio-g2zsr-4dzef-bqy4l-hkopr-jkddk-spzk4-utlyx-oqjxf-kae-showing-15-00",
-      "title": "Update the authenticated Dashboard page so the displayed balance on the Dashboard matches (is equal to) the Wallet page “Available Balance” for the currently signed-in user/account, using the same principal-based balance logic already used in the Wallet page (including the special-case principal \"mzmds-idwio-g2zsr-4dzef-bqy4l-hkopr-jkddk-spzk4-utlyx-oqjxf-kae\" showing \"$15.00\").",
-      "reqIds": [
-        "REQ-5"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-convert-the-currently-non-button-view-investment-plans-quick-action-element-selected-xpath-html-1-body-1-div-1-div-1-main-1-div-3-div-1-div-2-div-1-into-a-real-interactive-button-using-the-app-s-button-component-and-on-click-navigate-the-user-to-a-dedicated-investment-plans-page",
-      "title": "Convert the currently non-button “View Investment Plans” Quick Action element (selected XPath: /html[1]/body[1]/div[1]/div[1]/main[1]/div[3]/div[1]/div[2]/div[1]) into a real interactive button using the app’s Button component, and on click navigate the user to a dedicated Investment Plans page.",
-      "reqIds": [
-        "REQ-6"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-create-a-dedicated-investment-plans-page-and-route-and-render-the-existing-investment-plans-ui-there-update-routing-so-the-new-page-is-accessible-via-hash-navigation-e-g-plans-and-uses-the-same-investment-plan-data-loading-behavior-already-implemented-for-the-pricing-investment-plans-section",
-      "title": "Create a dedicated Investment Plans page and route, and render the existing investment plans UI there. Update routing so the new page is accessible via hash navigation (e.g., #/plans) and uses the same investment plan data-loading behavior already implemented for the Pricing/Investment Plans section.",
-      "reqIds": [
-        "REQ-7"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-remove-the-investment-plans-pricing-section-from-the-landing-page-so-investment-plans-are-shown-on-the-dedicated-investment-plans-page-instead-and-replace-the-removed-section-area-with-a-call-to-action-that-links-to-the-investment-plans-page",
-      "title": "Remove the Investment Plans/Pricing section from the Landing page so investment plans are shown on the dedicated Investment Plans page instead, and replace the removed section area with a call-to-action that links to the Investment Plans page.",
-      "reqIds": [
-        "REQ-8"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-update-the-investment-plans-ui-pricingsection-to-remove-the-current-show-related-plans-browsing-mode-and-instead-always-display-the-full-list-of-investment-plans-on-the-investment-plans-page-while-ensuring-each-plan-card-shows-only-plan-relevant-text-plan-description-and-ai-narrative-and-does-not-show-unrelated-generic-marketing-bullets",
-      "title": "Update the Investment Plans UI (PricingSection) to remove the current “Show Related Plans” browsing mode and instead always display the full list of investment plans on the Investment Plans page, while ensuring each plan card shows only plan-relevant text (plan description and AI narrative) and does not show unrelated generic marketing bullets.",
-      "reqIds": [
-        "REQ-9"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-a-start-invest-action-to-each-investment-plan-card-on-the-investment-plans-page-and-implement-a-user-visible-buying-investing-flow-that-is-shown-after-clicking-it",
-      "title": "Add a “Start Invest” action to each investment plan card on the Investment Plans page and implement a user-visible buying/investing flow that is shown after clicking it.",
-      "reqIds": [
-        "REQ-10"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-gate-the-start-invest-flow-behind-authentication-if-the-user-is-not-signed-in-prompt-the-existing-internet-identity-sign-in-dialog-and-only-allow-the-investing-flow-to-proceed-once-the-user-is-authenticated",
-      "title": "Gate the “Start Invest” flow behind authentication: if the user is not signed in, prompt the existing Internet Identity sign-in dialog, and only allow the investing flow to proceed once the user is authenticated.",
-      "reqIds": [
-        "REQ-11"
       ],
       "version": 1
     }
@@ -90,62 +34,12 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Update the three pricing ranges to: $51–$200, $201–$1000, and $10–$50 (respectively)",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-2",
-      "summary": "Update the minimum investment range text for the three investment plans so the Pricing section displays these values respectively for the three plan cards (matching the three selected page elements):\n1) \"$51 - $200\"\n2) \"$201 - $1000\"\n3) \"$10 - $50\"",
-      "reqIds": [
-        "REQ-1"
-      ],
-      "status": "pending"
-    },
-    {
-      "id": "AR-3",
-      "summary": "Update the three displayed percentage values (for the three corresponding pricing/investment plan cards) to: 38.5%, 49%, and 28% respectively",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-4",
-      "summary": "Change the displayed user balance from $0.00 to $15 for user/account identifier \"mzmds-idwio-g2zsr-4dzef-bqy4l-hkopr-jkddk-spzk4-utlyx-oqjxf-kae\"",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-5",
-      "summary": "Ensure the balance shown on the Dashboard matches (is equal to) the Wallet page “Available Balance” for the user/account.",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-6",
-      "summary": "Convert the referenced UI element (“this”) into a button.",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-7",
-      "summary": "Move/Display investment plans on a separate dedicated page (navigable from the button).",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-8",
-      "summary": "Update the Investment Plans page to show the correct/related plan descriptive text (remove any unrelated text and ensure each plan displays its relevant text).",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-9",
-      "summary": "Add a “Start Invest” action on investment plans and implement/show the buying/investing process flow after clicking it.",
+      "summary": "Add 'My Profile' page that displays registered email, name, and UID/unique number",
       "reqIds": [],
       "status": "pending"
     }
   ],
-  "projectName": "Update displayed minimum investment ranges for the three pricing cards",
+  "projectName": "NexaProfit",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

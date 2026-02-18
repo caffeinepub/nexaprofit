@@ -1,54 +1,64 @@
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import { useInternetIdentity } from '@/hooks/useInternetIdentity';
 import { useGetCallerUserProfile } from '@/hooks/useQueries';
-import { TrendingUp, Activity, DollarSign, BarChart3, Wallet, TrendingDown } from 'lucide-react';
+import { useGetCallerWalletBalance, useGetCallerWeeklyReturn } from '@/hooks/useWallet';
+import { TrendingUp, Activity, DollarSign, BarChart3, Wallet, Loader2 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { getFormattedAvailableBalance } from '@/utils/availableBalance';
+import { formatBalanceUSD } from '@/utils/availableBalance';
 
 interface DashboardPageProps {
   onNavigateToLanding: () => void;
   onNavigateToWallet: () => void;
   onNavigateToPlans: () => void;
+  onNavigateToProfile: () => void;
 }
 
-export function DashboardPage({ onNavigateToLanding, onNavigateToWallet, onNavigateToPlans }: DashboardPageProps) {
+export function DashboardPage({ onNavigateToLanding, onNavigateToWallet, onNavigateToPlans, onNavigateToProfile }: DashboardPageProps) {
   const { identity } = useInternetIdentity();
   const { data: userProfile } = useGetCallerUserProfile();
+  
+  // Fetch wallet balance and weekly return from backend
+  const { data: balanceData, isLoading: balanceLoading } = useGetCallerWalletBalance();
+  const { data: weeklyReturnData, isLoading: weeklyReturnLoading } = useGetCallerWeeklyReturn();
 
-  const currentPrincipal = identity?.getPrincipal().toString();
-  const balance = getFormattedAvailableBalance(currentPrincipal);
+  const balance = balanceData ?? 0;
+  const weeklyReturn = weeklyReturnData ?? 0;
 
   const stats = [
     {
       title: 'Portfolio Value',
-      value: balance,
+      value: balanceLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : formatBalanceUSD(balance),
       icon: DollarSign,
       description: 'Total investment value',
+      showButton: true,
     },
     {
       title: 'Active Positions',
       value: '0',
       icon: Activity,
       description: 'Currently active',
+      showButton: false,
     },
     {
       title: 'Weekly Return',
-      value: '0%',
+      value: weeklyReturnLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : `${(weeklyReturn * 100).toFixed(1)}%`,
       icon: TrendingUp,
-      description: 'This month',
+      description: 'Current plan rate',
+      showButton: false,
     },
     {
       title: 'AI Signals',
       value: '0',
       icon: BarChart3,
       description: 'Active insights',
+      showButton: false,
     },
   ];
 
   return (
     <div className="min-h-screen bg-background">
-      <DashboardHeader onNavigateToLanding={onNavigateToLanding} />
+      <DashboardHeader onNavigateToLanding={onNavigateToLanding} onNavigateToProfile={onNavigateToProfile} />
 
       <main className="container py-8 space-y-8">
         {/* Welcome Section */}
@@ -80,6 +90,15 @@ export function DashboardPage({ onNavigateToLanding, onNavigateToWallet, onNavig
                   <p className="text-xs text-muted-foreground">
                     {stat.description}
                   </p>
+                  {stat.showButton && (
+                    <Button 
+                      onClick={onNavigateToWallet}
+                      className="w-full mt-4 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white"
+                    >
+                      <Wallet className="mr-2 h-4 w-4" />
+                      Go to Wallet
+                    </Button>
+                  )}
                 </CardContent>
               </Card>
             );
@@ -91,44 +110,23 @@ export function DashboardPage({ onNavigateToLanding, onNavigateToWallet, onNavig
           <Card className="border-border/40 bg-card/50 backdrop-blur">
             <CardHeader>
               <CardTitle>Quick Actions</CardTitle>
-              <CardDescription>
-                Get started with your investment journey
-              </CardDescription>
+              <CardDescription>Manage your investments and portfolio</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <Button
+            <CardContent className="space-y-3">
+              <Button 
                 onClick={onNavigateToPlans}
-                variant="outline"
-                className="w-full justify-start h-auto py-4 px-4 hover:bg-accent/50 hover:border-red-500/50"
+                className="w-full justify-start bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white"
               >
-                <div className="text-left w-full">
-                  <div className="flex items-center gap-2 mb-1">
-                    <TrendingDown className="h-4 w-4 text-red-500" />
-                    <h3 className="font-semibold">View Investment Plans</h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground font-normal">
-                    Explore AI-powered investment strategies
-                  </p>
-                </div>
+                <TrendingUp className="mr-2 h-4 w-4" />
+                Browse Investment Plans
               </Button>
-              <div className="rounded-lg border border-border/40 p-4 hover:bg-accent/50 transition-colors cursor-pointer">
-                <h3 className="font-semibold mb-1">AI Insights</h3>
-                <p className="text-sm text-muted-foreground">
-                  Review real-time market analysis
-                </p>
-              </div>
-              <div className="rounded-lg border border-border/40 p-4 hover:bg-accent/50 transition-colors cursor-pointer">
-                <h3 className="font-semibold mb-1">Portfolio Analytics</h3>
-                <p className="text-sm text-muted-foreground">
-                  Track your investment performance
-                </p>
-              </div>
               <Button 
                 onClick={onNavigateToWallet}
-                className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white"
+                variant="outline" 
+                className="w-full justify-start"
               >
                 <Wallet className="mr-2 h-4 w-4" />
-                Go to Wallet
+                View Wallet
               </Button>
             </CardContent>
           </Card>
@@ -136,76 +134,75 @@ export function DashboardPage({ onNavigateToLanding, onNavigateToWallet, onNavig
           <Card className="border-border/40 bg-card/50 backdrop-blur">
             <CardHeader>
               <CardTitle>Account Status</CardTitle>
-              <CardDescription>
-                Your current account information
-              </CardDescription>
+              <CardDescription>Your account information</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Status</span>
-                  <span className="text-sm font-medium text-green-500">Active</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-muted-foreground">Account Type</span>
-                  <span className="text-sm font-medium">Standard</span>
-                </div>
-                {userProfile?.name && (
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Name</span>
-                    <span className="text-sm font-medium">{userProfile.name}</span>
-                  </div>
-                )}
-                {identity && (
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">Principal ID</span>
-                    <span className="text-xs font-mono truncate max-w-[200px]">
-                      {identity.getPrincipal().toString()}
-                    </span>
-                  </div>
-                )}
+            <CardContent className="space-y-3">
+              <div className="flex justify-between items-center py-2">
+                <span className="text-sm text-muted-foreground">Account Type</span>
+                <span className="text-sm font-medium">Standard</span>
+              </div>
+              <div className="flex justify-between items-center py-2">
+                <span className="text-sm text-muted-foreground">Status</span>
+                <span className="text-sm font-medium text-green-500">Active</span>
+              </div>
+              <div className="flex justify-between items-center py-2">
+                <span className="text-sm text-muted-foreground">Member Since</span>
+                <span className="text-sm font-medium">2026</span>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Info Banner */}
-        <Card className="border-red-500/20 bg-red-500/5">
-          <CardContent className="pt-6">
-            <div className="flex items-start gap-4">
-              <div className="rounded-full bg-red-500/10 p-2 mt-1">
-                <Activity className="h-5 w-5 text-red-500" />
-              </div>
-              <div className="space-y-1">
-                <h3 className="font-semibold">Getting Started</h3>
+        {/* Getting Started Banner */}
+        <Card className="border-red-500/20 bg-gradient-to-r from-red-500/5 to-red-600/5 backdrop-blur">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-red-500" />
+              Getting Started with NexaProfit
+            </CardTitle>
+            <CardDescription>
+              Start your AI-powered investment journey in three simple steps
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid gap-4 md:grid-cols-3">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="rounded-full bg-red-500/10 p-2">
+                    <span className="text-sm font-bold text-red-500">1</span>
+                  </div>
+                  <h4 className="font-semibold">Browse Plans</h4>
+                </div>
                 <p className="text-sm text-muted-foreground">
-                  Your dashboard is ready! Start exploring investment plans and AI insights to make informed decisions.
-                  All features are powered by advanced artificial intelligence to help you maximize returns.
+                  Explore our AI-curated investment plans tailored to different risk profiles.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="rounded-full bg-red-500/10 p-2">
+                    <span className="text-sm font-bold text-red-500">2</span>
+                  </div>
+                  <h4 className="font-semibold">Fund Wallet</h4>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Add funds to your wallet to start investing in your chosen plans.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="rounded-full bg-red-500/10 p-2">
+                    <span className="text-sm font-bold text-red-500">3</span>
+                  </div>
+                  <h4 className="font-semibold">Track Returns</h4>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Monitor your portfolio performance and weekly returns in real-time.
                 </p>
               </div>
             </div>
           </CardContent>
         </Card>
       </main>
-
-      {/* Footer */}
-      <footer className="border-t border-border/40 mt-12">
-        <div className="container py-6 text-center text-sm text-muted-foreground">
-          <p>
-            © {new Date().getFullYear()} NexaProfit Secure. Built with ❤️ using{' '}
-            <a
-              href={`https://caffeine.ai/?utm_source=Caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(
-                window.location.hostname
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-red-500 hover:text-red-600 transition-colors"
-            >
-              caffeine.ai
-            </a>
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }

@@ -1,90 +1,88 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Investment Plans UI simplification and authenticated Start Invest flow",
+  "title": "NexaProfit — Authenticated My Profile page (Name, Email, UID, Unique Number)",
   "requirements": [
     {
-      "id": "REQ-9",
-      "summary": "Simplify Investment Plans UI to always show all plans and remove related/browsing mode and generic marketing bullets.",
+      "id": "REQ-1",
+      "summary": "Add a new protected My Profile page that shows the signed-in user’s Name, registered Email (from caller user profile), and Internet Identity UID (principal), with safe placeholders when unset.",
       "acceptanceCriteria": [
-        "On #/plans, the plan cards no longer show a “Show Related Plans” button and there is no “Related Investment Plans” header mode/state.",
-        "All available plans render together in a consistent grid/list view.",
-        "Each plan card displays the plan’s name, description, weekly return, risk level, minimum investment range, and AI narrative (plan.aiNarrative).",
-        "The generic hard-coded bullet list (e.g., “AI-powered portfolio optimization”, “24/7 market monitoring”, “Real-time risk assessment”) is removed from the plan cards."
+        "When a user is signed in, navigating to the My Profile page shows: Name, Email, and UID (principal) in a clearly labeled layout.",
+        "If the caller user profile is not set (null) or fields are empty, the page shows an English placeholder (e.g., \"Not set\") instead of crashing.",
+        "When the user is not signed in, access to the My Profile page is blocked by the existing protected-route behavior and prompts for sign-in."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/components/site/PricingSection.tsx",
-          "operation": "modify",
-          "description": "Remove the “related plans” state/mode (selectedPlan/getRelatedPlans/header toggle/back button) and always render the full investment plan list. Ensure each plan card displays only plan-relevant fields (name, description, weekly return, risk level, minimumInvestmentRange, aiNarrative) and remove the hard-coded generic marketing bullet list. Verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-10",
-      "summary": "Add a Start Invest action per plan and implement an in-app, multi-step investing UI flow (no real payments).",
-      "acceptanceCriteria": [
-        "Each plan card includes a clearly labeled “Start Invest” button (English text).",
-        "Clicking “Start Invest” opens an in-app flow (modal or dedicated UI section) that guides the user through investing in the selected plan.",
-        "The flow includes, at minimum: selecting/confirming the plan, entering an investment amount, reviewing a summary, and confirming the purchase/invest action.",
-        "The flow includes visible success and cancel/close actions, and the UI returns to the plans list after completion or cancel."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/site/StartInvestFlowDialog.tsx",
+          "path": "frontend/src/pages/MyProfilePage.tsx",
           "operation": "create",
-          "description": "Create a reusable, in-app investing flow UI (modal dialog) that supports: (1) selected plan confirmation, (2) amount entry, (3) review summary, (4) confirm action, plus cancel/close and a success state. Use shadcn-ui dialog/form primitives already available under frontend/src/components/ui to present the flow consistently. Verify the component's usage instructions before implementing."
+          "description": "Create an authenticated My Profile page UI that reads the caller user profile via existing hooks and reads the current principal from the Internet Identity context; render labeled fields for Name, Email, and UID (principal), using English placeholders (e.g., \"Not set\") for null/empty values. Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/components/site/PricingSection.tsx",
+          "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Add a clearly labeled “Start Invest” button to each plan card and wire it to open StartInvestFlowDialog with the clicked plan as context. Ensure cancel/close and success reset the flow state and return to the plans list view. Verify the component's usage instructions before implementing."
+          "description": "Ensure the application continues to render routing via AppRouter so the new My Profile page can be reached once wired into routing/navigation. Verify the component's usage instructions before implementing."
         }
       ]
     },
     {
-      "id": "REQ-11",
-      "summary": "Require Internet Identity authentication before entering the Start Invest flow, using the existing sign-in dialog and non-immutable integration via props/callbacks.",
+      "id": "REQ-2",
+      "summary": "Display a stable deterministic Unique Number for the authenticated caller on the My Profile page by querying the backend capability and handling loading/error states in English.",
       "acceptanceCriteria": [
-        "When not authenticated, clicking “Start Invest” triggers the existing sign-in dialog (no new auth system).",
-        "After a successful sign-in, the user can proceed to the investing flow for the selected plan without needing to navigate away from #/plans.",
-        "No changes are made to the immutable authentication hook files; integration is done by passing callbacks/props through existing editable components (e.g., InvestmentPlansPage -> PricingSection)."
+        "Backend exposes a new query method that returns the caller’s unique number without requiring any additional user input.",
+        "The unique number is deterministic for the same caller principal across sessions.",
+        "The My Profile page displays the returned value labeled \"Unique Number\" and shows an error state in English if the value cannot be loaded."
       ],
       "file_operations": [
+        {
+          "path": "frontend/src/hooks/useUniqueNumber.ts",
+          "operation": "create",
+          "description": "Add a React Query hook that uses the authenticated actor to fetch the caller’s unique number (using the existing backend actor capability) with explicit loading and error handling suitable for display on the profile page. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/MyProfilePage.tsx",
+          "operation": "modify",
+          "description": "Integrate the unique number query hook into the My Profile page and render the result labeled as \"Unique Number\" with an English error state if loading fails. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "summary": "Wire a protected \"/profile\" hash route and add signed-in navigation entry points from the dashboard experience, plus a way to navigate back to dashboard/home from the profile page.",
+      "acceptanceCriteria": [
+        "There is a visible way for signed-in users to navigate to the My Profile page from the dashboard experience.",
+        "The route \"/profile\" renders the My Profile page and is protected by the same authentication gating used for dashboard and wallet routes.",
+        "Navigation back to dashboard and/or home is available from the My Profile page."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/router/useHashRoute.ts",
+          "operation": "modify",
+          "description": "Extend the hash-route union/type and route parsing to support the new protected route \"/profile\". Verify the component's usage instructions before implementing."
+        },
         {
           "path": "frontend/src/router/AppRouter.tsx",
           "operation": "modify",
-          "description": "Enhance the existing sign-in dialog wiring to support a caller-provided success callback (e.g., open Start Invest flow) instead of always navigating to the dashboard. Ensure the sign-in dialog can close and then run the provided callback while remaining on the current route (/plans) when triggered from Investment Plans. Verify the component's usage instructions before implementing."
+          "description": "Register the new \"/profile\" route and render MyProfilePage within the existing ProtectedDashboardRoute gating; add a navigate handler for \"/profile\" consistent with existing dashboard/wallet navigation. Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/pages/InvestmentPlansPage.tsx",
+          "path": "frontend/src/components/dashboard/DashboardHeader.tsx",
           "operation": "modify",
-          "description": "Pass the existing sign-in opener callback down into PricingSection (as an optional-success callback function) so PricingSection can request authentication before opening Start Invest. Verify the component's usage instructions before implementing."
+          "description": "Add a visible navigation control for signed-in users to reach My Profile from the dashboard header (e.g., a \"My Profile\" button/link) while preserving existing sign-out behavior. Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/components/site/PricingSection.tsx",
+          "path": "frontend/src/pages/DashboardPage.tsx",
           "operation": "modify",
-          "description": "Gate “Start Invest” behind authentication by checking the existing Internet Identity state (without editing immutable auth hooks). If unauthenticated, call the passed-in sign-in opener and resume into StartInvestFlowDialog after successful sign-in, without leaving #/plans. Verify the component's usage instructions before implementing."
+          "description": "Wire dashboard-level navigation to My Profile (e.g., pass an onNavigateToProfile callback into DashboardHeader and/or add a dashboard action button), ensuring the navigation is only available in the authenticated dashboard experience. Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/components/site/SiteHeader.tsx",
+          "path": "frontend/src/pages/WalletPage.tsx",
           "operation": "modify",
-          "description": "Adjust prop typing (if needed) so onOpenSignIn can accept an optional success callback while remaining backward-compatible with existing no-argument calls. Verify the component's usage instructions before implementing."
+          "description": "Update usage of DashboardHeader to pass through any new navigation props required for the My Profile entry point, keeping wallet route behavior unchanged. Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/pages/LandingPage.tsx",
+          "path": "frontend/src/pages/MyProfilePage.tsx",
           "operation": "modify",
-          "description": "Update prop typing/usage (if needed) to remain compatible with the updated onOpenSignIn function signature while keeping existing behavior unchanged. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/site/HeroSection.tsx",
-          "operation": "modify",
-          "description": "Update prop typing/usage (if needed) to remain compatible with the updated onOpenSignIn function signature while keeping existing behavior unchanged. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/router/ProtectedDashboardRoute.tsx",
-          "operation": "modify",
-          "description": "Update prop typing/usage (if needed) to remain compatible with the updated onOpenSignIn function signature while keeping the existing protected-route sign-in behavior unchanged. Verify the component's usage instructions before implementing."
+          "description": "Add an in-page navigation control (e.g., \"Back to Dashboard\" and/or \"Back to Home\") so users can easily return from My Profile. Verify the component's usage instructions before implementing."
         }
       ]
     }

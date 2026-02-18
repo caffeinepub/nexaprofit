@@ -10,9 +10,6 @@ import Principal "mo:core/Principal";
 import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
 
-
-// Explicitly specify migration function via with-clause
-
 actor {
   type InvestmentPlan = {
     planId : Text;
@@ -64,13 +61,15 @@ actor {
     investmentPreference : Text;
   };
 
-  // Investment Plans with Trends
+  type UserWallet = {
+    balance : Float;
+    weeklyReturn : Float;
+  };
+
+  let userWallets = Map.empty<Principal, UserWallet>();
   let investmentPlans = Map.empty<Text, InvestmentPlan>();
 
-  // Add three default investment plans with AI narratives and updated pricing range
   let initialPlans = [] : [InvestmentPlan];
-
-  // Add three default investment plans with AI narratives
   let newPlans : [InvestmentPlan] = [
     {
       planId = "plan1";
@@ -99,15 +98,22 @@ actor {
       minimumInvestmentRange = "$10 - $50";
       aiNarrative = "Trend stability indicator at 93% confirms high resilience. AI-driven scenario analysis predicts consistent negative correlation with market fluctuations.";
     },
+    {
+      planId = "free-plan";
+      name = "Free Plan";
+      description = "Experience careful investing risk-free! The Free Plan simulates market scenarios to educate investors.";
+      weeklyReturn = 0.0;
+      riskLevel = "None";
+      minimumInvestmentRange = "Free";
+      aiNarrative = "Virtual plan with no real investment or payout. Learn market trends, no risk and only -$0.35/day are simulated. Not for profit-generating.";
+    },
   ];
 
   newPlans.forEach(
     func(plan) { investmentPlans.add(plan.planId, plan) }
   );
 
-  // AI Insights Data
   let aiInsights = Map.empty<Text, AIInsight>();
-
   let defaultInsights = [
     {
       signalType = "Volatility Index";
@@ -137,34 +143,28 @@ actor {
       impactPotential = "Medium";
     },
   ];
-
   let defaultInsightKeys = ["insight1", "insight2", "insight3"];
   for (i in defaultInsights.keys()) {
     let key = if (i < defaultInsightKeys.size()) { defaultInsightKeys[i] : Text } else { "" };
     aiInsights.add(key, defaultInsights[i]);
   };
 
-  // Lead Storage
   let leads = Map.empty<Text, Lead>();
-
-  // User Profiles Storage
   let userProfiles = Map.empty<Principal, UserProfile>();
+  let userUniqueNumbers = Map.empty<Principal, Nat>();
 
-  // Initialize access control
   let accessControlState = AccessControl.initState();
+
   include MixinAuthorization(accessControlState);
 
-  // Get all investment plans (public access for marketing site)
   public query ({ caller }) func getInvestmentPlans() : async [InvestmentPlan] {
     investmentPlans.values().toArray().sort();
   };
 
-  // Get all AI insights sorted by relevance score (public access for marketing site)
   public query ({ caller }) func getAIInsights() : async [AIInsight] {
     aiInsights.values().toArray().sort(AIInsight.compareByRelevanceScore);
   };
 
-  // Add lead capture form submission functionality (public access - guests can submit)
   public shared ({ caller }) func submitLead(name : Text, email : Text, message : Text) : async () {
     if (email.isEmpty() or name.isEmpty()) {
       Runtime.trap("Invalid input");
@@ -179,7 +179,6 @@ actor {
     leads.add(email, newLead);
   };
 
-  // Get all leads (restricted to admins)
   public query ({ caller }) func getLeads() : async [Lead] {
     if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
       Runtime.trap("Unauthorized: Only admins can view leads");
@@ -188,7 +187,6 @@ actor {
     leads.values().toArray().sort(Lead.compareByEmail);
   };
 
-  // Get caller's own user profile (users only)
   public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can access profiles");
@@ -196,7 +194,6 @@ actor {
     userProfiles.get(caller);
   };
 
-  // Get another user's profile (admin can view any, users can only view their own)
   public query ({ caller }) func getUserProfile(user : Principal) : async ?UserProfile {
     if (caller != user and not AccessControl.isAdmin(accessControlState, caller)) {
       Runtime.trap("Unauthorized: Can only view your own profile");
@@ -204,12 +201,136 @@ actor {
     userProfiles.get(user);
   };
 
-  // Save caller's user profile (users only)
   public shared ({ caller }) func saveCallerUserProfile(profile : UserProfile) : async () {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only users can save profiles");
     };
     userProfiles.add(caller, profile);
   };
-};
 
+  public shared ({ caller }) func initializeCallerWallet() : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can initialize wallets");
+    };
+
+    switch (userWallets.get(caller)) {
+      case (?_) { /* Wallet already exists, do nothing */ };
+      case (null) {
+        let newWallet = {
+          balance = 0.0;
+          weeklyReturn = 0.0;
+        };
+        userWallets.add(caller, newWallet);
+      };
+    };
+  };
+
+  public query ({ caller }) func getCallerWalletBalance() : async ?Float {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can access wallet");
+    };
+    userWallets.get(caller).map(func(wallet) { wallet.balance });
+  };
+
+  public query ({ caller }) func getCallerWeeklyReturn() : async ?Float {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can access wallet");
+    };
+    userWallets.get(caller).map(func(wallet) { wallet.weeklyReturn });
+  };
+
+  public query ({ caller }) func getUserWalletBalance(user : Principal) : async ?Float {
+    if (not (AccessControl.isAdmin(accessControlState, caller))) {
+      Runtime.trap("Unauthorized: Only admins can view other users' wallets");
+    };
+    userWallets.get(user).map(func(wallet) { wallet.balance });
+  };
+
+  public query ({ caller }) func getUserWeeklyReturn(user : Principal) : async ?Float {
+    if (not (AccessControl.isAdmin(accessControlState, caller))) {
+      Runtime.trap("Unauthorized: Only admins can view other users' wallets");
+    };
+    userWallets.get(user).map(func(wallet) { wallet.weeklyReturn });
+  };
+
+  public shared ({ caller }) func purchaseInvestmentPlan(planId : Text, investmentAmount : Float) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can purchase plans");
+    };
+
+    if (investmentAmount <= 0.0) {
+      Runtime.trap("Investment amount must be positive");
+    };
+
+    let plan = switch (investmentPlans.get(planId)) {
+      case (?p) { p };
+      case (null) { Runtime.trap("Plan not found") };
+    };
+
+    let currentWallet = switch (userWallets.get(caller)) {
+      case (?w) { w };
+      case (null) { Runtime.trap("Wallet not found. Please initialize your wallet first.") };
+    };
+
+    if (currentWallet.balance < investmentAmount) {
+      Runtime.trap("Insufficient balance");
+    };
+
+    let newWallet = {
+      balance = currentWallet.balance - investmentAmount;
+      weeklyReturn = plan.weeklyReturn;
+    };
+    userWallets.add(caller, newWallet);
+  };
+
+  public shared ({ caller }) func creditUserWallet(user : Principal, amount : Float) : async () {
+    if (not (AccessControl.isAdmin(accessControlState, caller))) {
+      Runtime.trap("Unauthorized: Only admins can credit wallets");
+    };
+
+    if (amount <= 0.0) {
+      Runtime.trap("Credit amount must be positive");
+    };
+
+    let currentWallet = switch (userWallets.get(user)) {
+      case (?w) { w };
+      case (null) {
+        let newWallet = {
+          balance = amount;
+          weeklyReturn = 0.0;
+        };
+        userWallets.add(user, newWallet);
+        return;
+      };
+    };
+
+    let updatedWallet = {
+      balance = currentWallet.balance + amount;
+      weeklyReturn = currentWallet.weeklyReturn;
+    };
+    userWallets.add(user, updatedWallet);
+  };
+
+  public query ({ caller }) func getCallerNumber() : async Nat {
+    switch (userUniqueNumbers.get(caller)) {
+      case (?number) { number };
+      case (null) { Runtime.trap("User has not been assigned a number. Please register an account."); };
+    };
+  };
+
+  public shared ({ caller }) func registerUser(number : Nat) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("You must be logged in to register");
+    };
+    if (number > 1_000_000) {
+      Runtime.trap("Cannot register a number above 1_000_000");
+    };
+    if (number < 10_000) {
+      Runtime.trap("Cannot register a number below 10_000");
+    };
+    if (userUniqueNumbers.values().any(func(x) { x == number })) {
+      Runtime.trap("This number is already taken");
+    };
+    userUniqueNumbers.add(caller, number);
+  };
+};

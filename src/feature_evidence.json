@@ -2,10 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-update-the-investment-plans-ui-pricingsection-to-remove-the-current-show-related-plans-browsing-mode-and-instead-always-display-the-full-list-of-investment-plans-on-the-investment-plans-page-while-ensuring-each-plan-card-shows-only-plan-relevant-text-plan-description-and-ai-narrative-and-does-not-show-unrelated-generic-marketing-bullets",
-      "featureTitle": "Update the Investment Plans UI (PricingSection) to remove the current “Show Related Plans” browsing mode and instead always display the full list of investment plans on the Investment Plans page, while ensuring each plan card shows only plan-relevant text (plan description and AI narrative) and does not show unrelated generic marketing bullets.",
+      "featureId": "feature-create-a-new-authenticated-my-profile-page-that-displays-the-signed-in-user-s-name-and-registered-email-from-the-existing-caller-user-profile-and-also-displays-the-user-s-internet-identity-uid-principal",
+      "featureTitle": "Create a new authenticated \"My Profile\" page that displays the signed-in user’s Name and registered Email from the existing caller user profile, and also displays the user’s Internet Identity UID (principal).",
       "files": [
-        "frontend/src/components/site/PricingSection.tsx"
+        "frontend/src/App.tsx",
+        "frontend/src/pages/MyProfilePage.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -16,16 +17,16 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-9"
+        "REQ-1"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-add-a-start-invest-action-to-each-investment-plan-card-on-the-investment-plans-page-and-implement-a-user-visible-buying-investing-flow-that-is-shown-after-clicking-it",
-      "featureTitle": "Add a “Start Invest” action to each investment plan card on the Investment Plans page and implement a user-visible buying/investing flow that is shown after clicking it.",
+      "featureId": "feature-add-a-dedicated-backend-query-method-that-returns-a-stable-deterministic-unique-number-for-the-authenticated-caller-derived-from-the-caller-principal-and-display-this-number-on-the-my-profile-page-labeled-as-unique-number",
+      "featureTitle": "Add a dedicated backend query method that returns a stable, deterministic \"unique number\" for the authenticated caller (derived from the caller principal), and display this number on the My Profile page labeled as \"Unique Number\".",
       "files": [
-        "frontend/src/components/site/PricingSection.tsx",
-        "frontend/src/components/site/StartInvestFlowDialog.tsx"
+        "frontend/src/hooks/useUniqueNumber.ts",
+        "frontend/src/pages/MyProfilePage.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -36,21 +37,19 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-10"
+        "REQ-2"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-gate-the-start-invest-flow-behind-authentication-if-the-user-is-not-signed-in-prompt-the-existing-internet-identity-sign-in-dialog-and-only-allow-the-investing-flow-to-proceed-once-the-user-is-authenticated",
-      "featureTitle": "Gate the “Start Invest” flow behind authentication: if the user is not signed in, prompt the existing Internet Identity sign-in dialog, and only allow the investing flow to proceed once the user is authenticated.",
+      "featureId": "feature-add-navigation-to-the-new-my-profile-page-from-the-authenticated-area-dashboard-header-or-dashboard-page-actions-and-add-a-new-hash-route-e-g-profile-wired-into-the-existing-router",
+      "featureTitle": "Add navigation to the new My Profile page from the authenticated area (Dashboard header or dashboard page actions) and add a new hash route (e.g., \"/profile\") wired into the existing router.",
       "files": [
-        "frontend/src/components/site/HeroSection.tsx",
-        "frontend/src/components/site/PricingSection.tsx",
-        "frontend/src/components/site/SiteHeader.tsx",
-        "frontend/src/pages/InvestmentPlansPage.tsx",
-        "frontend/src/pages/LandingPage.tsx",
+        "frontend/src/components/dashboard/DashboardHeader.tsx",
+        "frontend/src/pages/DashboardPage.tsx",
+        "frontend/src/pages/MyProfilePage.tsx",
         "frontend/src/router/AppRouter.tsx",
-        "frontend/src/router/ProtectedDashboardRoute.tsx"
+        "frontend/src/router/useHashRoute.ts"
       ],
       "components": [
         "authorization@4.0.0",
@@ -61,7 +60,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-11"
+        "REQ-3"
       ],
       "confidence": "high"
     }

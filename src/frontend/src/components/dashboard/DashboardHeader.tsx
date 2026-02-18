@@ -1,14 +1,15 @@
 import { useInternetIdentity } from '@/hooks/useInternetIdentity';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
-import { LogOut, Loader2 } from 'lucide-react';
+import { LogOut, Loader2, User } from 'lucide-react';
 import { useState } from 'react';
 
 interface DashboardHeaderProps {
   onNavigateToLanding: () => void;
+  onNavigateToProfile?: () => void;
 }
 
-export function DashboardHeader({ onNavigateToLanding }: DashboardHeaderProps) {
+export function DashboardHeader({ onNavigateToLanding, onNavigateToProfile }: DashboardHeaderProps) {
   const { clear, isLoggingIn } = useInternetIdentity();
   const queryClient = useQueryClient();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -37,6 +38,16 @@ export function DashboardHeader({ onNavigateToLanding }: DashboardHeaderProps) {
         </div>
 
         <div className="flex items-center gap-4">
+          {onNavigateToProfile && (
+            <Button
+              onClick={onNavigateToProfile}
+              variant="ghost"
+              className="gap-2"
+            >
+              <User className="h-4 w-4" />
+              My Profile
+            </Button>
+          )}
           <Button
             onClick={handleSignOut}
             disabled={isLoggingOut || isLoggingIn}

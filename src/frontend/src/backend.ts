@@ -125,13 +125,22 @@ export enum UserRole {
 export interface backendInterface {
     _initializeAccessControlWithSecret(userSecret: string): Promise<void>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    creditUserWallet(user: Principal, amount: number): Promise<void>;
     getAIInsights(): Promise<Array<AIInsight>>;
+    getCallerNumber(): Promise<bigint>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
+    getCallerWalletBalance(): Promise<number | null>;
+    getCallerWeeklyReturn(): Promise<number | null>;
     getInvestmentPlans(): Promise<Array<InvestmentPlan>>;
     getLeads(): Promise<Array<Lead>>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
+    getUserWalletBalance(user: Principal): Promise<number | null>;
+    getUserWeeklyReturn(user: Principal): Promise<number | null>;
+    initializeCallerWallet(): Promise<void>;
     isCallerAdmin(): Promise<boolean>;
+    purchaseInvestmentPlan(planId: string, investmentAmount: number): Promise<void>;
+    registerUser(number: bigint): Promise<void>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
     submitLead(name: string, email: string, message: string): Promise<void>;
 }
@@ -166,6 +175,20 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async creditUserWallet(arg0: Principal, arg1: number): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.creditUserWallet(arg0, arg1);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.creditUserWallet(arg0, arg1);
+            return result;
+        }
+    }
     async getAIInsights(): Promise<Array<AIInsight>> {
         if (this.processError) {
             try {
@@ -177,6 +200,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.getAIInsights();
+            return result;
+        }
+    }
+    async getCallerNumber(): Promise<bigint> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getCallerNumber();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getCallerNumber();
             return result;
         }
     }
@@ -206,6 +243,34 @@ export class Backend implements backendInterface {
         } else {
             const result = await this.actor.getCallerUserRole();
             return from_candid_UserRole_n4(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getCallerWalletBalance(): Promise<number | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getCallerWalletBalance();
+                return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getCallerWalletBalance();
+            return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getCallerWeeklyReturn(): Promise<number | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getCallerWeeklyReturn();
+                return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getCallerWeeklyReturn();
+            return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
         }
     }
     async getInvestmentPlans(): Promise<Array<InvestmentPlan>> {
@@ -250,6 +315,48 @@ export class Backend implements backendInterface {
             return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
         }
     }
+    async getUserWalletBalance(arg0: Principal): Promise<number | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getUserWalletBalance(arg0);
+                return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getUserWalletBalance(arg0);
+            return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getUserWeeklyReturn(arg0: Principal): Promise<number | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getUserWeeklyReturn(arg0);
+                return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getUserWeeklyReturn(arg0);
+            return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async initializeCallerWallet(): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.initializeCallerWallet();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.initializeCallerWallet();
+            return result;
+        }
+    }
     async isCallerAdmin(): Promise<boolean> {
         if (this.processError) {
             try {
@@ -261,6 +368,34 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.isCallerAdmin();
+            return result;
+        }
+    }
+    async purchaseInvestmentPlan(arg0: string, arg1: number): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.purchaseInvestmentPlan(arg0, arg1);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.purchaseInvestmentPlan(arg0, arg1);
+            return result;
+        }
+    }
+    async registerUser(arg0: bigint): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.registerUser(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.registerUser(arg0);
             return result;
         }
     }
@@ -297,6 +432,9 @@ function from_candid_UserRole_n4(_uploadFile: (file: ExternalBlob) => Promise<Ui
     return from_candid_variant_n5(_uploadFile, _downloadFile, value);
 }
 function from_candid_opt_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_UserProfile]): UserProfile | null {
+    return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [number]): number | null {
     return value.length === 0 ? null : value[0];
 }
 function from_candid_variant_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {

@@ -45,9 +45,13 @@ export const Lead = IDL.Record({
 export const idlService = IDL.Service({
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+  'creditUserWallet' : IDL.Func([IDL.Principal, IDL.Float64], [], []),
   'getAIInsights' : IDL.Func([], [IDL.Vec(AIInsight)], ['query']),
+  'getCallerNumber' : IDL.Func([], [IDL.Nat], ['query']),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getCallerWalletBalance' : IDL.Func([], [IDL.Opt(IDL.Float64)], ['query']),
+  'getCallerWeeklyReturn' : IDL.Func([], [IDL.Opt(IDL.Float64)], ['query']),
   'getInvestmentPlans' : IDL.Func([], [IDL.Vec(InvestmentPlan)], ['query']),
   'getLeads' : IDL.Func([], [IDL.Vec(Lead)], ['query']),
   'getUserProfile' : IDL.Func(
@@ -55,7 +59,20 @@ export const idlService = IDL.Service({
       [IDL.Opt(UserProfile)],
       ['query'],
     ),
+  'getUserWalletBalance' : IDL.Func(
+      [IDL.Principal],
+      [IDL.Opt(IDL.Float64)],
+      ['query'],
+    ),
+  'getUserWeeklyReturn' : IDL.Func(
+      [IDL.Principal],
+      [IDL.Opt(IDL.Float64)],
+      ['query'],
+    ),
+  'initializeCallerWallet' : IDL.Func([], [], []),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'purchaseInvestmentPlan' : IDL.Func([IDL.Text, IDL.Float64], [], []),
+  'registerUser' : IDL.Func([IDL.Nat], [], []),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
   'submitLead' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
 });
@@ -100,9 +117,13 @@ export const idlFactory = ({ IDL }) => {
   return IDL.Service({
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+    'creditUserWallet' : IDL.Func([IDL.Principal, IDL.Float64], [], []),
     'getAIInsights' : IDL.Func([], [IDL.Vec(AIInsight)], ['query']),
+    'getCallerNumber' : IDL.Func([], [IDL.Nat], ['query']),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getCallerWalletBalance' : IDL.Func([], [IDL.Opt(IDL.Float64)], ['query']),
+    'getCallerWeeklyReturn' : IDL.Func([], [IDL.Opt(IDL.Float64)], ['query']),
     'getInvestmentPlans' : IDL.Func([], [IDL.Vec(InvestmentPlan)], ['query']),
     'getLeads' : IDL.Func([], [IDL.Vec(Lead)], ['query']),
     'getUserProfile' : IDL.Func(
@@ -110,7 +131,20 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Opt(UserProfile)],
         ['query'],
       ),
+    'getUserWalletBalance' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Opt(IDL.Float64)],
+        ['query'],
+      ),
+    'getUserWeeklyReturn' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Opt(IDL.Float64)],
+        ['query'],
+      ),
+    'initializeCallerWallet' : IDL.Func([], [], []),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'purchaseInvestmentPlan' : IDL.Func([IDL.Text, IDL.Float64], [], []),
+    'registerUser' : IDL.Func([IDL.Nat], [], []),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
     'submitLead' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
   });
