@@ -2,11 +2,11 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-create-a-new-authenticated-my-profile-page-that-displays-the-signed-in-user-s-name-and-registered-email-from-the-existing-caller-user-profile-and-also-displays-the-user-s-internet-identity-uid-principal",
-      "featureTitle": "Create a new authenticated \"My Profile\" page that displays the signed-in user’s Name and registered Email from the existing caller user profile, and also displays the user’s Internet Identity UID (principal).",
+      "featureId": "feature-update-the-selected-button-at-xpath-html-1-body-1-div-3-div-2-div-2-button-1-so-that-clicking-it-triggers-the-sign-in-flow-and-after-sign-in-registration-completes-successfully-navigates-the-user-to-the-dashboard-route-dashboard",
+      "featureTitle": "Update the selected button at XPath /html[1]/body[1]/div[3]/div[2]/div[2]/button[1] so that clicking it triggers the sign-in flow and, after sign-in/registration completes successfully, navigates the user to the dashboard route (/dashboard).",
       "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/pages/MyProfilePage.tsx"
+        "frontend/src/components/site/HeroSection.tsx",
+        "frontend/src/pages/LandingPage.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -14,53 +14,12 @@
         "shadcn-ui@1.0.0",
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
+        "github-export-icp-cli@1.0.0",
+        "blob-storage@4.0.0",
+        "http-outcalls@3.0.0"
       ],
       "testIds": [
         "REQ-1"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-a-dedicated-backend-query-method-that-returns-a-stable-deterministic-unique-number-for-the-authenticated-caller-derived-from-the-caller-principal-and-display-this-number-on-the-my-profile-page-labeled-as-unique-number",
-      "featureTitle": "Add a dedicated backend query method that returns a stable, deterministic \"unique number\" for the authenticated caller (derived from the caller principal), and display this number on the My Profile page labeled as \"Unique Number\".",
-      "files": [
-        "frontend/src/hooks/useUniqueNumber.ts",
-        "frontend/src/pages/MyProfilePage.tsx"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-2"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-navigation-to-the-new-my-profile-page-from-the-authenticated-area-dashboard-header-or-dashboard-page-actions-and-add-a-new-hash-route-e-g-profile-wired-into-the-existing-router",
-      "featureTitle": "Add navigation to the new My Profile page from the authenticated area (Dashboard header or dashboard page actions) and add a new hash route (e.g., \"/profile\") wired into the existing router.",
-      "files": [
-        "frontend/src/components/dashboard/DashboardHeader.tsx",
-        "frontend/src/pages/DashboardPage.tsx",
-        "frontend/src/pages/MyProfilePage.tsx",
-        "frontend/src/router/AppRouter.tsx",
-        "frontend/src/router/useHashRoute.ts"
-      ],
-      "components": [
-        "authorization@4.0.0",
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-3"
       ],
       "confidence": "high"
     }

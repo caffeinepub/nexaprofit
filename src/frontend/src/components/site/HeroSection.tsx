@@ -3,9 +3,15 @@ import { Button } from '@/components/ui/button';
 
 interface HeroSectionProps {
   onOpenSignIn: (onSuccess?: () => void) => void;
+  onNavigateToDashboard: () => void;
 }
 
-export function HeroSection({ onOpenSignIn }: HeroSectionProps) {
+export function HeroSection({ onOpenSignIn, onNavigateToDashboard }: HeroSectionProps) {
+  const handleGetStarted = () => {
+    // Pass dashboard navigation as success callback
+    onOpenSignIn(onNavigateToDashboard);
+  };
+
   return (
     <section className="relative overflow-hidden">
       {/* Background Image with Overlay */}
@@ -58,7 +64,7 @@ export function HeroSection({ onOpenSignIn }: HeroSectionProps) {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
             <Button
               size="lg"
-              onClick={() => onOpenSignIn()}
+              onClick={handleGetStarted}
               className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white shadow-lg shadow-red-500/30 group"
             >
               Get Started

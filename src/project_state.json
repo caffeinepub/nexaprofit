@@ -2,31 +2,17 @@
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
   "summary": "New project",
-  "architectural_notes": [],
+  "architectural_notes": [
+    "Dashboard route is /dashboard; post-sign-in navigation should redirect there on button click."
+  ],
   "known_issues": [],
   "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-create-a-new-authenticated-my-profile-page-that-displays-the-signed-in-user-s-name-and-registered-email-from-the-existing-caller-user-profile-and-also-displays-the-user-s-internet-identity-uid-principal",
-      "title": "Create a new authenticated \"My Profile\" page that displays the signed-in user’s Name and registered Email from the existing caller user profile, and also displays the user’s Internet Identity UID (principal).",
+      "id": "feature-update-the-selected-button-at-xpath-html-1-body-1-div-3-div-2-div-2-button-1-so-that-clicking-it-triggers-the-sign-in-flow-and-after-sign-in-registration-completes-successfully-navigates-the-user-to-the-dashboard-route-dashboard",
+      "title": "Update the selected button at XPath /html[1]/body[1]/div[3]/div[2]/div[2]/button[1] so that clicking it triggers the sign-in flow and, after sign-in/registration completes successfully, navigates the user to the dashboard route (/dashboard).",
       "reqIds": [
         "REQ-1"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-a-dedicated-backend-query-method-that-returns-a-stable-deterministic-unique-number-for-the-authenticated-caller-derived-from-the-caller-principal-and-display-this-number-on-the-my-profile-page-labeled-as-unique-number",
-      "title": "Add a dedicated backend query method that returns a stable, deterministic \"unique number\" for the authenticated caller (derived from the caller principal), and display this number on the My Profile page labeled as \"Unique Number\".",
-      "reqIds": [
-        "REQ-2"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-navigation-to-the-new-my-profile-page-from-the-authenticated-area-dashboard-header-or-dashboard-page-actions-and-add-a-new-hash-route-e-g-profile-wired-into-the-existing-router",
-      "title": "Add navigation to the new My Profile page from the authenticated area (Dashboard header or dashboard page actions) and add a new hash route (e.g., \"/profile\") wired into the existing router.",
-      "reqIds": [
-        "REQ-3"
       ],
       "version": 1
     }
@@ -34,7 +20,7 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Add 'My Profile' page that displays registered email, name, and UID/unique number",
+      "summary": "After completing sign-in, clicking the specified button should navigate to the dashboard route (/dashboard)",
       "reqIds": [],
       "status": "pending"
     }

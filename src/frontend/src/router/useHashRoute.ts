@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export type Route = '/' | '/dashboard' | '/wallet' | '/plans' | '/profile';
+export type Route = '/' | '/dashboard' | '/wallet' | '/plans' | '/profile' | '/admin/wallet-credit';
 
 export function useHashRoute() {
   const getRoute = (): Route => {
@@ -9,6 +9,7 @@ export function useHashRoute() {
     if (hash === '/wallet') return '/wallet';
     if (hash === '/plans') return '/plans';
     if (hash === '/profile') return '/profile';
+    if (hash === '/admin/wallet-credit') return '/admin/wallet-credit';
     return '/';
   };
 

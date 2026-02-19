@@ -1,88 +1,27 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "NexaProfit — Authenticated My Profile page (Name, Email, UID, Unique Number)",
+  "title": "Dashboard redirect after Internet Identity sign-in from selected landing CTA",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Add a new protected My Profile page that shows the signed-in user’s Name, registered Email (from caller user profile), and Internet Identity UID (principal), with safe placeholders when unset.",
+      "summary": "Ensure clicking the selected landing-page CTA triggers Internet Identity sign-in/registration as needed and then navigates to the existing hash route /dashboard.",
       "acceptanceCriteria": [
-        "When a user is signed in, navigating to the My Profile page shows: Name, Email, and UID (principal) in a clearly labeled layout.",
-        "If the caller user profile is not set (null) or fields are empty, the page shows an English placeholder (e.g., \"Not set\") instead of crashing.",
-        "When the user is not signed in, access to the My Profile page is blocked by the existing protected-route behavior and prompts for sign-in."
+        "When the user clicks the selected button, the Internet Identity sign-in dialog opens (if not already authenticated).",
+        "After sign-in and registration complete successfully, the app navigates to the /dashboard route.",
+        "If the user is already signed in and registered, completing the flow results in navigation to /dashboard without requiring an additional manual step.",
+        "No other buttons or elements outside the selected XPath have their behavior changed."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/MyProfilePage.tsx",
-          "operation": "create",
-          "description": "Create an authenticated My Profile page UI that reads the caller user profile via existing hooks and reads the current principal from the Internet Identity context; render labeled fields for Name, Email, and UID (principal), using English placeholders (e.g., \"Not set\") for null/empty values. Verify the component's usage instructions before implementing."
+          "path": "frontend/src/components/site/HeroSection.tsx",
+          "operation": "modify",
+          "description": "Update ONLY the first CTA Button (the 'Get Started' button; corresponds to the selected XPath) so its onClick enforces the desired flow: if already authenticated+registered, navigate directly to /dashboard; otherwise open the existing Internet Identity sign-in/registration dialog and pass an onSuccess callback that navigates to /dashboard after completion. Use the authorization-provided Internet Identity/registration hooks already in the app to detect authenticated/registered state. Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/App.tsx",
+          "path": "frontend/src/pages/LandingPage.tsx",
           "operation": "modify",
-          "description": "Ensure the application continues to render routing via AppRouter so the new My Profile page can be reached once wired into routing/navigation. Verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "summary": "Display a stable deterministic Unique Number for the authenticated caller on the My Profile page by querying the backend capability and handling loading/error states in English.",
-      "acceptanceCriteria": [
-        "Backend exposes a new query method that returns the caller’s unique number without requiring any additional user input.",
-        "The unique number is deterministic for the same caller principal across sessions.",
-        "The My Profile page displays the returned value labeled \"Unique Number\" and shows an error state in English if the value cannot be loaded."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/hooks/useUniqueNumber.ts",
-          "operation": "create",
-          "description": "Add a React Query hook that uses the authenticated actor to fetch the caller’s unique number (using the existing backend actor capability) with explicit loading and error handling suitable for display on the profile page. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/MyProfilePage.tsx",
-          "operation": "modify",
-          "description": "Integrate the unique number query hook into the My Profile page and render the result labeled as \"Unique Number\" with an English error state if loading fails. Verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "summary": "Wire a protected \"/profile\" hash route and add signed-in navigation entry points from the dashboard experience, plus a way to navigate back to dashboard/home from the profile page.",
-      "acceptanceCriteria": [
-        "There is a visible way for signed-in users to navigate to the My Profile page from the dashboard experience.",
-        "The route \"/profile\" renders the My Profile page and is protected by the same authentication gating used for dashboard and wallet routes.",
-        "Navigation back to dashboard and/or home is available from the My Profile page."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/router/useHashRoute.ts",
-          "operation": "modify",
-          "description": "Extend the hash-route union/type and route parsing to support the new protected route \"/profile\". Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/router/AppRouter.tsx",
-          "operation": "modify",
-          "description": "Register the new \"/profile\" route and render MyProfilePage within the existing ProtectedDashboardRoute gating; add a navigate handler for \"/profile\" consistent with existing dashboard/wallet navigation. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/dashboard/DashboardHeader.tsx",
-          "operation": "modify",
-          "description": "Add a visible navigation control for signed-in users to reach My Profile from the dashboard header (e.g., a \"My Profile\" button/link) while preserving existing sign-out behavior. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/DashboardPage.tsx",
-          "operation": "modify",
-          "description": "Wire dashboard-level navigation to My Profile (e.g., pass an onNavigateToProfile callback into DashboardHeader and/or add a dashboard action button), ensuring the navigation is only available in the authenticated dashboard experience. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/WalletPage.tsx",
-          "operation": "modify",
-          "description": "Update usage of DashboardHeader to pass through any new navigation props required for the My Profile entry point, keeping wallet route behavior unchanged. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/MyProfilePage.tsx",
-          "operation": "modify",
-          "description": "Add an in-page navigation control (e.g., \"Back to Dashboard\" and/or \"Back to Home\") so users can easily return from My Profile. Verify the component's usage instructions before implementing."
+          "description": "Wire HeroSection with a dashboard navigation callback (reuse the existing onNavigateToDashboard from LandingPage props) so the updated selected CTA button can navigate to the existing /dashboard hash route after successful sign-in/registration, without changing any other CTA/button behaviors."
         }
       ]
     }

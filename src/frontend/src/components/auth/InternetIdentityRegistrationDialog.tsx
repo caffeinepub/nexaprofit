@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useInternetIdentity } from '@/hooks/useInternetIdentity';
+import { useEnsureRegisteredUser } from '@/hooks/useEnsureRegisteredUser';
 import {
   Dialog,
   DialogContent,
@@ -23,9 +24,11 @@ export function InternetIdentityRegistrationDialog({
   onSuccess,
 }: InternetIdentityRegistrationDialogProps) {
   const { login, loginStatus, identity, isLoginError, isLoggingIn, loginError } = useInternetIdentity();
+  const { isRegistering, isRegistered, registrationError } = useEnsureRegisteredUser();
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   const isLoginSuccess = loginStatus === 'success' && !!identity;
+  const isFullyComplete = isLoginSuccess && isRegistered && !isRegistering;
 
   // Handle login errors
   useEffect(() => {
@@ -34,9 +37,16 @@ export function InternetIdentityRegistrationDialog({
     }
   }, [isLoginError, loginError]);
 
-  // Navigate to dashboard on successful login
+  // Handle registration errors
   useEffect(() => {
-    if (isLoginSuccess) {
+    if (registrationError) {
+      setErrorMessage('Failed to complete registration. Please try again.');
+    }
+  }, [registrationError]);
+
+  // Navigate on successful login AND registration
+  useEffect(() => {
+    if (isFullyComplete) {
       const timer = setTimeout(() => {
         onOpenChange(false);
         if (onSuccess) {
@@ -45,7 +55,7 @@ export function InternetIdentityRegistrationDialog({
       }, 1500);
       return () => clearTimeout(timer);
     }
-  }, [isLoginSuccess, onOpenChange, onSuccess]);
+  }, [isFullyComplete, onOpenChange, onSuccess]);
 
   const handleLogin = async () => {
     setErrorMessage('');
@@ -58,8 +68,8 @@ export function InternetIdentityRegistrationDialog({
   };
 
   const handleTryAgain = () => {
-    // If user is already authenticated, navigate to dashboard instead of retrying login
-    if (identity) {
+    // If user is already authenticated and registered, navigate to success callback
+    if (identity && isRegistered) {
       onOpenChange(false);
       if (onSuccess) {
         onSuccess();
@@ -72,15 +82,32 @@ export function InternetIdentityRegistrationDialog({
     handleLogin();
   };
 
+  // Determine current state message
+  const getStatusMessage = () => {
+    if (isFullyComplete) {
+      return 'Registration complete! Redirecting...';
+    }
+    if (isRegistering) {
+      return 'Setting up your account...';
+    }
+    if (isLoggingIn) {
+      return 'Connecting to Internet Identity...';
+    }
+    return '';
+  };
+
+  const statusMessage = getStatusMessage();
+  const showLoading = (isLoggingIn || isRegistering) && !isFullyComplete;
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold">
-            {isLoginSuccess ? 'Welcome!' : 'Get Started'}
+            {isFullyComplete ? 'Welcome!' : 'Sign In'}
           </DialogTitle>
           <DialogDescription>
-            {isLoginSuccess
+            {isFullyComplete
               ? 'You have successfully signed in to your account.'
               : 'Sign in or create an account to access the NexaProfit platform.'}
           </DialogDescription>
@@ -88,29 +115,29 @@ export function InternetIdentityRegistrationDialog({
 
         <div className="space-y-4 py-4">
           {/* Success State */}
-          {isLoginSuccess && (
+          {isFullyComplete && (
             <div className="flex flex-col items-center justify-center py-6 space-y-4">
               <div className="rounded-full bg-green-500/10 p-3">
                 <CheckCircle2 className="h-12 w-12 text-green-500" />
               </div>
               <p className="text-center text-muted-foreground">
-                Authentication successful! Redirecting...
+                {statusMessage}
               </p>
             </div>
           )}
 
           {/* Loading State */}
-          {isLoggingIn && !isLoginSuccess && (
+          {showLoading && (
             <div className="flex flex-col items-center justify-center py-6 space-y-4">
               <Loader2 className="h-12 w-12 animate-spin text-red-500" />
               <p className="text-center text-muted-foreground">
-                Connecting to Internet Identity...
+                {statusMessage}
               </p>
             </div>
           )}
 
           {/* Error State */}
-          {errorMessage && !isLoggingIn && !isLoginSuccess && (
+          {errorMessage && !showLoading && !isFullyComplete && (
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>{errorMessage}</AlertDescription>
@@ -118,7 +145,7 @@ export function InternetIdentityRegistrationDialog({
           )}
 
           {/* Initial/Error State - Show Login Button */}
-          {!isLoggingIn && !isLoginSuccess && (
+          {!showLoading && !isFullyComplete && (
             <div className="space-y-4">
               <div className="rounded-lg border border-border bg-card p-6 space-y-4">
                 <div className="flex items-center gap-3">
@@ -143,7 +170,7 @@ export function InternetIdentityRegistrationDialog({
                 className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white"
                 size="lg"
               >
-                {errorMessage ? 'Open Dashboard' : 'Sign In with Internet Identity'}
+                {errorMessage ? 'Continue' : 'Sign In with Internet Identity'}
               </Button>
 
               <p className="text-xs text-center text-muted-foreground">

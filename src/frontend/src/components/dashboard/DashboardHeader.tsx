@@ -17,8 +17,11 @@ export function DashboardHeader({ onNavigateToLanding, onNavigateToProfile }: Da
   const handleSignOut = async () => {
     setIsLoggingOut(true);
     try {
-      await clear();
+      // Clear all cached application data including user profile
       queryClient.clear();
+      // Clear authentication state
+      await clear();
+      // Navigate to landing page
       onNavigateToLanding();
     } catch (error) {
       console.error('Sign out error:', error);

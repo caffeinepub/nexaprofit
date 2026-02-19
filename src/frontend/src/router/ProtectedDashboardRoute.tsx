@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { useInternetIdentity } from '@/hooks/useInternetIdentity';
+import { useEnsureRegisteredUser } from '@/hooks/useEnsureRegisteredUser';
 import { Button } from '@/components/ui/button';
 import { LogIn, Loader2 } from 'lucide-react';
 
@@ -15,14 +16,17 @@ export function ProtectedDashboardRoute({
   onOpenSignIn,
 }: ProtectedDashboardRouteProps) {
   const { identity, isInitializing } = useInternetIdentity();
+  const { isRegistering, isRegistered } = useEnsureRegisteredUser();
 
-  // Show loading while checking auth state
-  if (isInitializing) {
+  // Show loading while checking auth state or registering user
+  if (isInitializing || (identity && isRegistering)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-12 w-12 animate-spin text-red-500" />
-          <p className="text-muted-foreground">Loading...</p>
+          <p className="text-muted-foreground">
+            {isRegistering ? 'Setting up your account...' : 'Loading...'}
+          </p>
         </div>
       </div>
     );
@@ -63,6 +67,6 @@ export function ProtectedDashboardRoute({
     );
   }
 
-  // User is authenticated, render the protected content
+  // User is authenticated and registered, render the protected content
   return <>{children}</>;
 }

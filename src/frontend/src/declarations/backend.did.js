@@ -8,10 +8,28 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
+export const _CaffeineStorageCreateCertificateResult = IDL.Record({
+  'method' : IDL.Text,
+  'blob_hash' : IDL.Text,
+});
+export const _CaffeineStorageRefillInformation = IDL.Record({
+  'proposed_top_up_amount' : IDL.Opt(IDL.Nat),
+});
+export const _CaffeineStorageRefillResult = IDL.Record({
+  'success' : IDL.Opt(IDL.Bool),
+  'topped_up_amount' : IDL.Opt(IDL.Nat),
+});
 export const UserRole = IDL.Variant({
   'admin' : IDL.Null,
   'user' : IDL.Null,
   'guest' : IDL.Null,
+});
+export const DepositEligibility = IDL.Record({
+  'requiresNumber' : IDL.Bool,
+  'requiresProfile' : IDL.Bool,
+  'isEligible' : IDL.Bool,
+  'requiresAuthentication' : IDL.Bool,
+  'message' : IDL.Text,
 });
 export const AIInsight = IDL.Record({
   'value' : IDL.Float64,
@@ -27,6 +45,13 @@ export const UserProfile = IDL.Record({
   'email' : IDL.Text,
   'investmentPreference' : IDL.Text,
 });
+export const ExternalBlob = IDL.Vec(IDL.Nat8);
+export const DepositRequest = IDL.Record({
+  'principal' : IDL.Principal,
+  'userId' : IDL.Text,
+  'userProfile' : IDL.Opt(UserProfile),
+  'screenshot' : ExternalBlob,
+});
 export const InvestmentPlan = IDL.Record({
   'planId' : IDL.Text,
   'name' : IDL.Text,
@@ -41,10 +66,43 @@ export const Lead = IDL.Record({
   'email' : IDL.Text,
   'message' : IDL.Text,
 });
+export const TelegramBotConfig = IDL.Record({
+  'active' : IDL.Bool,
+  'chatId' : IDL.Text,
+  'botToken' : IDL.Text,
+});
 
 export const idlService = IDL.Service({
+  '_caffeineStorageBlobIsLive' : IDL.Func(
+      [IDL.Vec(IDL.Nat8)],
+      [IDL.Bool],
+      ['query'],
+    ),
+  '_caffeineStorageBlobsToDelete' : IDL.Func(
+      [],
+      [IDL.Vec(IDL.Vec(IDL.Nat8))],
+      ['query'],
+    ),
+  '_caffeineStorageConfirmBlobDeletion' : IDL.Func(
+      [IDL.Vec(IDL.Vec(IDL.Nat8))],
+      [],
+      [],
+    ),
+  '_caffeineStorageCreateCertificate' : IDL.Func(
+      [IDL.Text],
+      [_CaffeineStorageCreateCertificateResult],
+      [],
+    ),
+  '_caffeineStorageRefillCashier' : IDL.Func(
+      [IDL.Opt(_CaffeineStorageRefillInformation)],
+      [_CaffeineStorageRefillResult],
+      [],
+    ),
+  '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+  'adminCreditSpecificUser' : IDL.Func([], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+  'checkDepositEligibility' : IDL.Func([], [DepositEligibility], ['query']),
   'creditUserWallet' : IDL.Func([IDL.Principal, IDL.Float64], [], []),
   'getAIInsights' : IDL.Func([], [IDL.Vec(AIInsight)], ['query']),
   'getCallerNumber' : IDL.Func([], [IDL.Nat], ['query']),
@@ -52,8 +110,10 @@ export const idlService = IDL.Service({
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
   'getCallerWalletBalance' : IDL.Func([], [IDL.Opt(IDL.Float64)], ['query']),
   'getCallerWeeklyReturn' : IDL.Func([], [IDL.Opt(IDL.Float64)], ['query']),
+  'getDepositRequestsTest' : IDL.Func([], [IDL.Vec(DepositRequest)], ['query']),
   'getInvestmentPlans' : IDL.Func([], [IDL.Vec(InvestmentPlan)], ['query']),
   'getLeads' : IDL.Func([], [IDL.Vec(Lead)], ['query']),
+  'getTelegramBotConfig' : IDL.Func([], [TelegramBotConfig], ['query']),
   'getUserProfile' : IDL.Func(
       [IDL.Principal],
       [IDL.Opt(UserProfile)],
@@ -72,18 +132,41 @@ export const idlService = IDL.Service({
   'initializeCallerWallet' : IDL.Func([], [], []),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
   'purchaseInvestmentPlan' : IDL.Func([IDL.Text, IDL.Float64], [], []),
+  'registerAuthenticatedUser' : IDL.Func([], [], []),
   'registerUser' : IDL.Func([IDL.Nat], [], []),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+  'setWalletBalance' : IDL.Func([IDL.Principal, IDL.Float64], [], []),
+  'setWalletBalanceByEmail' : IDL.Func([IDL.Text, IDL.Float64], [], []),
+  'submitDeposit' : IDL.Func([ExternalBlob], [IDL.Text], []),
   'submitLead' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
+  'updateTelegramBotConfig' : IDL.Func([IDL.Text, IDL.Text, IDL.Bool], [], []),
 });
 
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
+  const _CaffeineStorageCreateCertificateResult = IDL.Record({
+    'method' : IDL.Text,
+    'blob_hash' : IDL.Text,
+  });
+  const _CaffeineStorageRefillInformation = IDL.Record({
+    'proposed_top_up_amount' : IDL.Opt(IDL.Nat),
+  });
+  const _CaffeineStorageRefillResult = IDL.Record({
+    'success' : IDL.Opt(IDL.Bool),
+    'topped_up_amount' : IDL.Opt(IDL.Nat),
+  });
   const UserRole = IDL.Variant({
     'admin' : IDL.Null,
     'user' : IDL.Null,
     'guest' : IDL.Null,
+  });
+  const DepositEligibility = IDL.Record({
+    'requiresNumber' : IDL.Bool,
+    'requiresProfile' : IDL.Bool,
+    'isEligible' : IDL.Bool,
+    'requiresAuthentication' : IDL.Bool,
+    'message' : IDL.Text,
   });
   const AIInsight = IDL.Record({
     'value' : IDL.Float64,
@@ -99,6 +182,13 @@ export const idlFactory = ({ IDL }) => {
     'email' : IDL.Text,
     'investmentPreference' : IDL.Text,
   });
+  const ExternalBlob = IDL.Vec(IDL.Nat8);
+  const DepositRequest = IDL.Record({
+    'principal' : IDL.Principal,
+    'userId' : IDL.Text,
+    'userProfile' : IDL.Opt(UserProfile),
+    'screenshot' : ExternalBlob,
+  });
   const InvestmentPlan = IDL.Record({
     'planId' : IDL.Text,
     'name' : IDL.Text,
@@ -113,10 +203,43 @@ export const idlFactory = ({ IDL }) => {
     'email' : IDL.Text,
     'message' : IDL.Text,
   });
+  const TelegramBotConfig = IDL.Record({
+    'active' : IDL.Bool,
+    'chatId' : IDL.Text,
+    'botToken' : IDL.Text,
+  });
   
   return IDL.Service({
+    '_caffeineStorageBlobIsLive' : IDL.Func(
+        [IDL.Vec(IDL.Nat8)],
+        [IDL.Bool],
+        ['query'],
+      ),
+    '_caffeineStorageBlobsToDelete' : IDL.Func(
+        [],
+        [IDL.Vec(IDL.Vec(IDL.Nat8))],
+        ['query'],
+      ),
+    '_caffeineStorageConfirmBlobDeletion' : IDL.Func(
+        [IDL.Vec(IDL.Vec(IDL.Nat8))],
+        [],
+        [],
+      ),
+    '_caffeineStorageCreateCertificate' : IDL.Func(
+        [IDL.Text],
+        [_CaffeineStorageCreateCertificateResult],
+        [],
+      ),
+    '_caffeineStorageRefillCashier' : IDL.Func(
+        [IDL.Opt(_CaffeineStorageRefillInformation)],
+        [_CaffeineStorageRefillResult],
+        [],
+      ),
+    '_caffeineStorageUpdateGatewayPrincipals' : IDL.Func([], [], []),
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+    'adminCreditSpecificUser' : IDL.Func([], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+    'checkDepositEligibility' : IDL.Func([], [DepositEligibility], ['query']),
     'creditUserWallet' : IDL.Func([IDL.Principal, IDL.Float64], [], []),
     'getAIInsights' : IDL.Func([], [IDL.Vec(AIInsight)], ['query']),
     'getCallerNumber' : IDL.Func([], [IDL.Nat], ['query']),
@@ -124,8 +247,14 @@ export const idlFactory = ({ IDL }) => {
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
     'getCallerWalletBalance' : IDL.Func([], [IDL.Opt(IDL.Float64)], ['query']),
     'getCallerWeeklyReturn' : IDL.Func([], [IDL.Opt(IDL.Float64)], ['query']),
+    'getDepositRequestsTest' : IDL.Func(
+        [],
+        [IDL.Vec(DepositRequest)],
+        ['query'],
+      ),
     'getInvestmentPlans' : IDL.Func([], [IDL.Vec(InvestmentPlan)], ['query']),
     'getLeads' : IDL.Func([], [IDL.Vec(Lead)], ['query']),
+    'getTelegramBotConfig' : IDL.Func([], [TelegramBotConfig], ['query']),
     'getUserProfile' : IDL.Func(
         [IDL.Principal],
         [IDL.Opt(UserProfile)],
@@ -144,9 +273,18 @@ export const idlFactory = ({ IDL }) => {
     'initializeCallerWallet' : IDL.Func([], [], []),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
     'purchaseInvestmentPlan' : IDL.Func([IDL.Text, IDL.Float64], [], []),
+    'registerAuthenticatedUser' : IDL.Func([], [], []),
     'registerUser' : IDL.Func([IDL.Nat], [], []),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+    'setWalletBalance' : IDL.Func([IDL.Principal, IDL.Float64], [], []),
+    'setWalletBalanceByEmail' : IDL.Func([IDL.Text, IDL.Float64], [], []),
+    'submitDeposit' : IDL.Func([ExternalBlob], [IDL.Text], []),
     'submitLead' : IDL.Func([IDL.Text, IDL.Text, IDL.Text], [], []),
+    'updateTelegramBotConfig' : IDL.Func(
+        [IDL.Text, IDL.Text, IDL.Bool],
+        [],
+        [],
+      ),
   });
 };
 

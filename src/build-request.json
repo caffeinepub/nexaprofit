@@ -1,76 +1,55 @@
 {
   "kind": "build_request",
-  "title": "Add My Profile page showing registered email, name, UID and a unique number",
+  "title": "Navigate to /dashboard after sign-in from selected CTA button",
   "projectName": "NexaProfit",
   "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Create a new authenticated \"My Profile\" page that displays the signed-in user’s Name and registered Email from the existing caller user profile, and also displays the user’s Internet Identity UID (principal).",
+      "text": "Update the selected button at XPath /html[1]/body[1]/div[3]/div[2]/div[2]/button[1] so that clicking it triggers the sign-in flow and, after sign-in/registration completes successfully, navigates the user to the dashboard route (/dashboard).",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-4"
+          "msg-1",
+          "msg-2",
+          "msg-3"
         ],
         "quotes": [
-          "Create My profile page and create a unique number \n\nShow registered email \nAnd Uid \nName"
+          "After someone click this button open dashboard",
+          "Open dashboard after complete sign in",
+          "1.dashboard\n2.yes"
         ]
       },
       "acceptanceCriteria": [
-        "When a user is signed in, navigating to the My Profile page shows: Name, Email, and UID (principal) in a clearly labeled layout.",
-        "If the caller user profile is not set (null) or fields are empty, the page shows an English placeholder (e.g., \"Not set\") instead of crashing.",
-        "When the user is not signed in, access to the My Profile page is blocked by the existing protected-route behavior and prompts for sign-in."
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "text": "Add a dedicated backend query method that returns a stable, deterministic \"unique number\" for the authenticated caller (derived from the caller principal), and display this number on the My Profile page labeled as \"Unique Number\".",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-4"
-        ],
-        "quotes": [
-          "Create My profile page and create a unique number \n\nShow registered email \nAnd Uid \nName"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Backend exposes a new query method that returns the caller’s unique number without requiring any additional user input.",
-        "The unique number is deterministic for the same caller principal across sessions.",
-        "The My Profile page displays the returned value labeled \"Unique Number\" and shows an error state in English if the value cannot be loaded."
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "text": "Add navigation to the new My Profile page from the authenticated area (Dashboard header or dashboard page actions) and add a new hash route (e.g., \"/profile\") wired into the existing router.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-4"
-        ],
-        "quotes": [
-          "Create My profile page and create a unique number \n\nShow registered email \nAnd Uid \nName"
-        ]
-      },
-      "acceptanceCriteria": [
-        "There is a visible way for signed-in users to navigate to the My Profile page from the dashboard experience.",
-        "The route \"/profile\" renders the My Profile page and is protected by the same authentication gating used for dashboard and wallet routes.",
-        "Navigation back to dashboard and/or home is available from the My Profile page."
+        "When the user clicks the selected button, the Internet Identity sign-in dialog opens (if not already authenticated).",
+        "After sign-in and registration complete successfully, the app navigates to the /dashboard route.",
+        "If the user is already signed in and registered, completing the flow results in navigation to /dashboard without requiring an additional manual step.",
+        "No other buttons or elements outside the selected XPath have their behavior changed."
       ]
     }
   ],
   "constraints": [
-    "Backend must remain a single Motoko actor with all logic in backend/main.mo.",
-    "Do not edit any files under frontend/src/components/ui or any other frontend immutable paths listed in SYSTEM_CONTEXT; compose existing UI components instead.",
-    "Use English for all user-facing text."
+    "Apply changes ONLY to the element identified by XPath /html[1]/body[1]/div[3]/div[2]/div[2]/button[1].",
+    "Do not edit any files under frontend/src/components/ui (read-only components).",
+    "Keep routing hash-based and ensure navigation resolves to the existing /dashboard route."
   ],
   "nonGoals": [
-    "Do not add third-party authentication providers (only Internet Identity).",
-    "Do not introduce external databases or non-Motoko backend services.",
-    "Do not build real-time presence/chat or notifications as part of the profile page."
+    "Redesigning the dashboard page UI.",
+    "Changing authentication providers or adding third-party authentication.",
+    "Adding new routes beyond /dashboard."
   ],
   "imageRequirements": {
     "required": [],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }

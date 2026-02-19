@@ -1,62 +1,41 @@
 {
   "kind": "spec_vs_diff_report",
   "version": "1.0",
-  "generatedAt": "2026-02-18T07:17:12.210Z",
-  "summary": "Implemented a new My Profile page and wired it into the protected hash-router with navigation from the Dashboard header. A frontend hook calls a new backend method name (`getCallerNumber`) to fetch a caller-derived unique number, but the diff summary does not provide evidence that the required backend query method is actually implemented in `backend/main.mo`, and the profile-page error-state rendering for unique-number load failures is not fully verifiable due to truncation.",
+  "generatedAt": "2026-02-18T14:15:27.606Z",
+  "summary": "The diff implements post-sign-in dashboard navigation by wiring the HeroSection “Get Started” button to call `onOpenSignIn` with a success callback (`onNavigateToDashboard`). However, the BuildRequest constraint to apply changes ONLY to the element identified by the provided XPath cannot be verified from the diff, and multiple non-target files/utilities were modified.",
   "missing_requirements": [
     {
-      "id": "REQ-2",
-      "requirement": "Backend exposes a new query method that returns the caller’s stable, deterministic \"unique number\" derived from the caller principal.",
-      "reason": "Frontend calls `actor.getCallerNumber()` but the provided `backend/main.mo` diff excerpt does not show any added `query` method (e.g., `getCallerNumber`) implementing deterministic principal-derived logic.",
+      "id": "REQ-1",
+      "requirement": "Apply changes ONLY to the element identified by XPath /html[1]/body[1]/div[3]/div[2]/div[2]/button[1], and ensure no other buttons/elements outside that XPath have their behavior changed.",
+      "reason": "The diff shows behavior-related wiring changes spanning multiple components (new props and callback plumbing), so the change is not isolated to a single, clearly-identifiable DOM element per the XPath constraint. The diff does not provide evidence mapping the modified Button to the specified XPath, nor does it prove no other elements were affected.",
       "evidence": [
-        "frontend/src/hooks/useUniqueNumber.ts",
-        "backend/main.mo (truncated excerpt shows no getCallerNumber)"
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "requirement": "My Profile page shows an English error state if the unique number cannot be loaded.",
-      "reason": "`useGetCallerNumber` suppresses errors by catching and returning `null`, and while `MyProfilePage` captures `numberError`, the relevant UI rendering is truncated so it cannot be confirmed that an explicit English error state is shown when loading fails.",
-      "evidence": [
-        "frontend/src/hooks/useUniqueNumber.ts",
-        "frontend/src/pages/MyProfilePage.tsx (truncated)"
+        "frontend/src/components/site/HeroSection.tsx",
+        "frontend/src/pages/LandingPage.tsx"
       ]
     }
   ],
   "hallucinated_features": [
     {
-      "description": "Added/changed app-wide React Query client setup (QueryClientProvider configuration).",
-      "reason": "Not requested by any REQ; requirements focus on profile page, routing, navigation, and a backend query.",
+      "description": "Expanded URL parameter/sessionStorage utilities (get/store/clear persisted parameters, hash-query parsing helpers) unrelated to the requested post-sign-in navigation change.",
+      "reason": "BuildRequest is narrowly about updating one CTA button to trigger sign-in then navigate to /dashboard; URL parameter persistence utilities are not requested.",
       "evidence": [
-        "frontend/src/App.tsx"
+        "frontend/src/utils/urlParams.ts"
       ]
     },
     {
-      "description": "Modified hash router behavior to apply an inactivity timeout across routes.",
-      "reason": "Not requested as part of adding a profile page, unique number query, or navigation.",
+      "description": "Project metadata/state updates adding new_feature_requests entries (AR-1/AR-2).",
+      "reason": "BuildRequest does not request changes to project tracking/state files.",
       "evidence": [
-        "frontend/src/router/AppRouter.tsx"
-      ]
-    },
-    {
-      "description": "Multiple marketing/landing-page and site component content/theme changes (hero stats, features grid, pricing grid behavior, favicon/SEO, etc.).",
-      "reason": "Not requested by the BuildRequest; appears unrelated to REQ-1/2/3 scope.",
-      "evidence": [
-        "frontend-file-summaries.txt"
+        "project_state.json"
       ]
     }
   ],
-  "confidence": 0.58,
+  "confidence": 0.62,
   "changed_files": [
-    "backend/main.mo",
     "frontend-file-summaries.txt",
-    "frontend/src/App.tsx",
-    "frontend/src/components/dashboard/DashboardHeader.tsx",
-    "frontend/src/hooks/useUniqueNumber.ts",
-    "frontend/src/pages/DashboardPage.tsx",
-    "frontend/src/pages/MyProfilePage.tsx",
-    "frontend/src/router/AppRouter.tsx",
-    "frontend/src/router/useHashRoute.ts",
+    "frontend/src/components/site/HeroSection.tsx",
+    "frontend/src/pages/LandingPage.tsx",
+    "frontend/src/utils/urlParams.ts",
     "project_state.json"
   ]
 }

@@ -1,12 +1,11 @@
 # Specification
 
 ## Summary
-**Goal:** Add an authenticated My Profile page that shows the signed-in user’s name, registered email, Internet Identity UID (principal), and a deterministic unique number.
+**Goal:** Ensure the selected CTA button triggers Internet Identity sign-in (if needed) and then routes the user to `/dashboard` after successful sign-in/registration.
 
 **Planned changes:**
-- Create a new protected route `/profile` that renders a My Profile page in the authenticated area.
-- On the My Profile page, display clearly labeled fields for Name, Email, and UID (principal), using English placeholders (e.g., “Not set”) when values are missing.
-- Add a backend query method in `backend/main.mo` that returns a stable, deterministic “Unique Number” derived from the caller principal, and show it on the My Profile page with an English error state if it fails to load.
-- Add navigation to reach My Profile from the dashboard experience, and provide a way to navigate back to dashboard/home from the profile page.
+- Update only the button at XPath `/html[1]/body[1]/div[3]/div[2]/div[2]/button[1]` so its click handler initiates the existing Internet Identity sign-in/registration flow when the user is not authenticated.
+- After the sign-in/registration flow completes successfully (or immediately if the user is already signed in and registered), navigate via existing hash-based routing to the `/dashboard` route.
+- Leave all other buttons and UI elements unchanged and avoid modifications to any files under `frontend/src/components/ui`.
 
-**User-visible outcome:** Signed-in users can navigate to “My Profile” and view their Name, Email, UID (principal), and a stable Unique Number; signed-out users are blocked by existing protected-route behavior and prompted to sign in.
+**User-visible outcome:** Clicking the specified CTA button signs the user in (if necessary) and then automatically takes them to the dashboard at `/dashboard`.

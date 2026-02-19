@@ -3,6 +3,8 @@
  * Works with both hash-based and browser-based routing
  */
 
+import type { Route } from '@/router/useHashRoute';
+
 /**
  * Extracts a URL parameter from the current URL
  * Works with both query strings (?param=value) and hash-based routing (#/?param=value)
@@ -205,4 +207,71 @@ export function getSecretFromHash(paramName: string): string | null {
  */
 export function getSecretParameter(paramName: string): string | null {
     return getSecretFromHash(paramName);
+}
+
+/**
+ * Post-login intent for redirecting users after authentication
+ */
+export interface PostLoginIntent {
+    route: Route;
+    action?: string;
+}
+
+const POST_LOGIN_INTENT_KEY = 'postLoginIntent';
+
+/**
+ * Stores a post-login intent in sessionStorage
+ * Used to redirect users to a specific route/action after they complete authentication
+ *
+ * @param intent - The intent containing route and optional action
+ */
+export function setPostLoginIntent(intent: PostLoginIntent): void {
+    try {
+        sessionStorage.setItem(POST_LOGIN_INTENT_KEY, JSON.stringify(intent));
+    } catch (error) {
+        console.warn('Failed to store post-login intent:', error);
+    }
+}
+
+/**
+ * Retrieves and removes the post-login intent from sessionStorage
+ * This consumes the intent, so subsequent calls will return null
+ *
+ * @returns The stored intent if found, null otherwise
+ */
+export function consumePostLoginIntent(): PostLoginIntent | null {
+    try {
+        const intentStr = sessionStorage.getItem(POST_LOGIN_INTENT_KEY);
+        if (!intentStr) {
+            return null;
+        }
+        
+        // Remove the intent after reading it
+        sessionStorage.removeItem(POST_LOGIN_INTENT_KEY);
+        
+        return JSON.parse(intentStr) as PostLoginIntent;
+    } catch (error) {
+        console.warn('Failed to consume post-login intent:', error);
+        return null;
+    }
+}
+
+/**
+ * Retrieves the post-login intent without removing it from sessionStorage
+ * Useful for checking if an intent exists without consuming it
+ *
+ * @returns The stored intent if found, null otherwise
+ */
+export function peekPostLoginIntent(): PostLoginIntent | null {
+    try {
+        const intentStr = sessionStorage.getItem(POST_LOGIN_INTENT_KEY);
+        if (!intentStr) {
+            return null;
+        }
+        
+        return JSON.parse(intentStr) as PostLoginIntent;
+    } catch (error) {
+        console.warn('Failed to peek post-login intent:', error);
+        return null;
+    }
 }

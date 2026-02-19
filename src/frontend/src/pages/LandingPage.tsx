@@ -19,7 +19,7 @@ export function LandingPage({ onNavigateToDashboard, onOpenSignIn, onNavigateToP
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader onNavigateToDashboard={onNavigateToDashboard} onOpenSignIn={onOpenSignIn} />
-      <HeroSection onOpenSignIn={onOpenSignIn} />
+      <HeroSection onOpenSignIn={onOpenSignIn} onNavigateToDashboard={onNavigateToDashboard} />
       <FeaturesSection />
       <AIInsightsSection />
       <AnalyticsPreviewSection />

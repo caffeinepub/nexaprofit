@@ -2,7 +2,8 @@ import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import { useInternetIdentity } from '@/hooks/useInternetIdentity';
 import { useGetCallerUserProfile } from '@/hooks/useQueries';
 import { useGetCallerWalletBalance, useGetCallerWeeklyReturn } from '@/hooks/useWallet';
-import { TrendingUp, Activity, DollarSign, BarChart3, Wallet, Loader2 } from 'lucide-react';
+import { useIsCallerAdmin } from '@/hooks/useAdminWalletCredit';
+import { TrendingUp, Activity, DollarSign, BarChart3, Wallet, Loader2, ShieldCheck } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { formatBalanceUSD } from '@/utils/availableBalance';
@@ -12,16 +13,27 @@ interface DashboardPageProps {
   onNavigateToWallet: () => void;
   onNavigateToPlans: () => void;
   onNavigateToProfile: () => void;
+  onNavigateToAdminWalletCredit: () => void;
 }
 
-export function DashboardPage({ onNavigateToLanding, onNavigateToWallet, onNavigateToPlans, onNavigateToProfile }: DashboardPageProps) {
+export function DashboardPage({ 
+  onNavigateToLanding, 
+  onNavigateToWallet, 
+  onNavigateToPlans, 
+  onNavigateToProfile,
+  onNavigateToAdminWalletCredit 
+}: DashboardPageProps) {
   const { identity } = useInternetIdentity();
   const { data: userProfile } = useGetCallerUserProfile();
   
   // Fetch wallet balance and weekly return from backend
   const { data: balanceData, isLoading: balanceLoading } = useGetCallerWalletBalance();
   const { data: weeklyReturnData, isLoading: weeklyReturnLoading } = useGetCallerWeeklyReturn();
+  
+  // Check if user is admin
+  const { data: isAdmin, isLoading: adminCheckLoading } = useIsCallerAdmin();
 
+  // Default to 0 for new users
   const balance = balanceData ?? 0;
   const weeklyReturn = weeklyReturnData ?? 0;
 
@@ -122,12 +134,22 @@ export function DashboardPage({ onNavigateToLanding, onNavigateToWallet, onNavig
               </Button>
               <Button 
                 onClick={onNavigateToWallet}
-                variant="outline" 
+                variant="outline"
                 className="w-full justify-start"
               >
                 <Wallet className="mr-2 h-4 w-4" />
-                View Wallet
+                Manage Wallet
               </Button>
+              {!adminCheckLoading && isAdmin && (
+                <Button 
+                  onClick={onNavigateToAdminWalletCredit}
+                  variant="outline"
+                  className="w-full justify-start border-red-500/20 hover:bg-red-500/10"
+                >
+                  <ShieldCheck className="mr-2 h-4 w-4 text-red-500" />
+                  Admin: Credit Wallets
+                </Button>
+              )}
             </CardContent>
           </Card>
 
@@ -136,72 +158,68 @@ export function DashboardPage({ onNavigateToLanding, onNavigateToWallet, onNavig
               <CardTitle>Account Status</CardTitle>
               <CardDescription>Your account information</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex justify-between items-center py-2">
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Account Type</span>
-                <span className="text-sm font-medium">Standard</span>
+                <span className="text-sm font-medium">
+                  {adminCheckLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : isAdmin ? (
+                    <span className="inline-flex items-center gap-1 text-red-500">
+                      <ShieldCheck className="h-4 w-4" />
+                      Admin
+                    </span>
+                  ) : (
+                    'Standard'
+                  )}
+                </span>
               </div>
-              <div className="flex justify-between items-center py-2">
+              <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Status</span>
                 <span className="text-sm font-medium text-green-500">Active</span>
               </div>
-              <div className="flex justify-between items-center py-2">
+              <div className="flex items-center justify-between">
                 <span className="text-sm text-muted-foreground">Member Since</span>
-                <span className="text-sm font-medium">2026</span>
+                <span className="text-sm font-medium">Today</span>
               </div>
             </CardContent>
           </Card>
         </div>
 
         {/* Getting Started Banner */}
-        <Card className="border-red-500/20 bg-gradient-to-r from-red-500/5 to-red-600/5 backdrop-blur">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-red-500" />
-              Getting Started with NexaProfit
-            </CardTitle>
-            <CardDescription>
-              Start your AI-powered investment journey in three simple steps
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-3">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <div className="rounded-full bg-red-500/10 p-2">
-                    <span className="text-sm font-bold text-red-500">1</span>
-                  </div>
-                  <h4 className="font-semibold">Browse Plans</h4>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Explore our AI-curated investment plans tailored to different risk profiles.
-                </p>
+        {balance === 0 && (
+          <Card className="border-red-500/20 bg-gradient-to-r from-red-500/5 to-red-600/5">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-red-500" />
+                Getting Started
+              </CardTitle>
+              <CardDescription>
+                Start your investment journey with NexaProfit
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground">
+                Your account is ready! To begin investing, deposit funds into your wallet and choose an investment plan that matches your goals.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button 
+                  onClick={onNavigateToWallet}
+                  className="bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white"
+                >
+                  <Wallet className="mr-2 h-4 w-4" />
+                  Deposit Funds
+                </Button>
+                <Button 
+                  onClick={onNavigateToPlans}
+                  variant="outline"
+                >
+                  View Investment Plans
+                </Button>
               </div>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <div className="rounded-full bg-red-500/10 p-2">
-                    <span className="text-sm font-bold text-red-500">2</span>
-                  </div>
-                  <h4 className="font-semibold">Fund Wallet</h4>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Add funds to your wallet to start investing in your chosen plans.
-                </p>
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <div className="rounded-full bg-red-500/10 p-2">
-                    <span className="text-sm font-bold text-red-500">3</span>
-                  </div>
-                  <h4 className="font-semibold">Track Returns</h4>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Monitor your portfolio performance and weekly returns in real-time.
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
       </main>
     </div>
   );

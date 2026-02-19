@@ -1,80 +1,38 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-18T07:17:12.214Z",
+  "generatedAt": "2026-02-18T14:15:27.609Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 3,
-    "implemented": 3,
+    "total": 1,
+    "implemented": 1,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Create a new authenticated \"My Profile\" page that displays the signed-in user’s Name and registered Email from the existing caller user profile, and also displays the user’s Internet Identity UID (principal).",
+        "summary": "Update the selected button at XPath /html[1]/body[1]/div[3]/div[2]/div[2]/button[1] so that clicking it triggers the sign-in flow and, after sign-in/registration completes successfully, navigates the user to the dashboard route (/dashboard).",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/MyProfilePage.tsx",
-          "frontend/src/App.tsx"
+          "frontend/src/components/site/HeroSection.tsx",
+          "frontend/src/pages/LandingPage.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/pages/MyProfilePage.tsx",
-          "frontend/src/App.tsx"
-        ]
-      },
-      {
-        "id": "REQ-2",
-        "summary": "Add a dedicated backend query method that returns a stable, deterministic \"unique number\" for the authenticated caller (derived from the caller principal), and display this number on the My Profile page labeled as \"Unique Number\".",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/hooks/useUniqueNumber.ts",
-          "frontend/src/pages/MyProfilePage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/hooks/useUniqueNumber.ts",
-          "frontend/src/pages/MyProfilePage.tsx"
-        ]
-      },
-      {
-        "id": "REQ-3",
-        "summary": "Add navigation to the new My Profile page from the authenticated area (Dashboard header or dashboard page actions) and add a new hash route (e.g., \"/profile\") wired into the existing router.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/router/useHashRoute.ts",
-          "frontend/src/router/AppRouter.tsx",
-          "frontend/src/components/dashboard/DashboardHeader.tsx",
-          "frontend/src/pages/DashboardPage.tsx",
-          "frontend/src/pages/WalletPage.tsx",
-          "frontend/src/pages/MyProfilePage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/router/useHashRoute.ts",
-          "frontend/src/router/AppRouter.tsx",
-          "frontend/src/components/dashboard/DashboardHeader.tsx",
-          "frontend/src/pages/DashboardPage.tsx",
-          "frontend/src/pages/MyProfilePage.tsx"
+          "frontend/src/components/site/HeroSection.tsx",
+          "frontend/src/pages/LandingPage.tsx"
         ]
       }
     ]
   },
   "changedFiles": [
-    "backend/main.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/App.tsx",
-    "frontend/src/backend.d.ts",
-    "frontend/src/backend.ts",
-    "frontend/src/components/dashboard/DashboardHeader.tsx",
-    "frontend/src/declarations/backend.did.d.ts",
-    "frontend/src/declarations/backend.did.js",
-    "frontend/src/hooks/useUniqueNumber.ts",
-    "frontend/src/pages/DashboardPage.tsx",
-    "frontend/src/pages/MyProfilePage.tsx",
-    "frontend/src/router/AppRouter.tsx",
-    "frontend/src/router/useHashRoute.ts",
+    "frontend/src/components/site/HeroSection.tsx",
+    "frontend/src/pages/LandingPage.tsx",
+    "frontend/src/utils/urlParams.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

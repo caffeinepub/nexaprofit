@@ -5,9 +5,11 @@ import { DashboardPage } from '@/pages/DashboardPage';
 import { WalletPage } from '@/pages/WalletPage';
 import { InvestmentPlansPage } from '@/pages/InvestmentPlansPage';
 import { MyProfilePage } from '@/pages/MyProfilePage';
+import { AdminWalletCreditPage } from '@/pages/AdminWalletCreditPage';
 import { ProtectedDashboardRoute } from './ProtectedDashboardRoute';
 import { InternetIdentityRegistrationDialog } from '@/components/auth/InternetIdentityRegistrationDialog';
 import { useInactivityTimeout } from '@/hooks/useInactivityTimeout';
+import { consumePostLoginIntent, setPostLoginIntent } from '@/utils/urlParams';
 
 export function AppRouter() {
   const { route, navigate } = useHashRoute();
@@ -34,12 +36,37 @@ export function AppRouter() {
     navigate('/profile');
   };
 
+  const handleNavigateToAdminWalletCredit = () => {
+    navigate('/admin/wallet-credit');
+  };
+
   const handleOpenSignIn = (onSuccess?: () => void) => {
     setSignInSuccessCallback(() => onSuccess);
     setIsSignInOpen(true);
   };
 
   const handleSignInSuccess = () => {
+    // Check for post-login intent first
+    const intent = consumePostLoginIntent();
+    
+    if (intent) {
+      // Navigate to the intended route
+      navigate(intent.route);
+      
+      // If there's a custom callback from the intent, execute it
+      if (signInSuccessCallback) {
+        // Small delay to ensure navigation completes
+        setTimeout(() => {
+          if (signInSuccessCallback) {
+            signInSuccessCallback();
+          }
+        }, 100);
+      }
+      
+      setSignInSuccessCallback(undefined);
+      return;
+    }
+
     // If there's a custom callback, execute it
     if (signInSuccessCallback) {
       signInSuccessCallback();
@@ -75,6 +102,7 @@ export function AppRouter() {
             onNavigateToWallet={handleNavigateToWallet}
             onNavigateToPlans={handleNavigateToPlans}
             onNavigateToProfile={handleNavigateToProfile}
+            onNavigateToAdminWalletCredit={handleNavigateToAdminWalletCredit}
           />
         </ProtectedDashboardRoute>
       )}
@@ -86,6 +114,7 @@ export function AppRouter() {
           <WalletPage 
             onNavigateToLanding={handleNavigateToLanding}
             onNavigateToDashboard={handleNavigateToDashboard}
+            onOpenSignIn={handleOpenSignIn}
           />
         </ProtectedDashboardRoute>
       )}
@@ -103,6 +132,18 @@ export function AppRouter() {
           <MyProfilePage 
             onNavigateToLanding={handleNavigateToLanding}
             onNavigateToDashboard={handleNavigateToDashboard}
+          />
+        </ProtectedDashboardRoute>
+      )}
+      {route === '/admin/wallet-credit' && (
+        <ProtectedDashboardRoute
+          onNavigateToLanding={handleNavigateToLanding}
+          onOpenSignIn={handleOpenSignIn}
+        >
+          <AdminWalletCreditPage 
+            onNavigateToLanding={handleNavigateToLanding}
+            onNavigateToDashboard={handleNavigateToDashboard}
+            onNavigateToProfile={handleNavigateToProfile}
           />
         </ProtectedDashboardRoute>
       )}

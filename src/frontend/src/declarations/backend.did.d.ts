@@ -19,6 +19,20 @@ export interface AIInsight {
   'signalType' : string,
   'impactPotential' : string,
 }
+export interface DepositEligibility {
+  'requiresNumber' : boolean,
+  'requiresProfile' : boolean,
+  'isEligible' : boolean,
+  'requiresAuthentication' : boolean,
+  'message' : string,
+}
+export interface DepositRequest {
+  'principal' : Principal,
+  'userId' : string,
+  'userProfile' : [] | [UserProfile],
+  'screenshot' : ExternalBlob,
+}
+export type ExternalBlob = Uint8Array;
 export interface InvestmentPlan {
   'planId' : string,
   'name' : string,
@@ -29,6 +43,11 @@ export interface InvestmentPlan {
   'aiNarrative' : string,
 }
 export interface Lead { 'name' : string, 'email' : string, 'message' : string }
+export interface TelegramBotConfig {
+  'active' : boolean,
+  'chatId' : string,
+  'botToken' : string,
+}
 export interface UserProfile {
   'name' : string,
   'email' : string,
@@ -37,9 +56,37 @@ export interface UserProfile {
 export type UserRole = { 'admin' : null } |
   { 'user' : null } |
   { 'guest' : null };
+export interface _CaffeineStorageCreateCertificateResult {
+  'method' : string,
+  'blob_hash' : string,
+}
+export interface _CaffeineStorageRefillInformation {
+  'proposed_top_up_amount' : [] | [bigint],
+}
+export interface _CaffeineStorageRefillResult {
+  'success' : [] | [boolean],
+  'topped_up_amount' : [] | [bigint],
+}
 export interface _SERVICE {
+  '_caffeineStorageBlobIsLive' : ActorMethod<[Uint8Array], boolean>,
+  '_caffeineStorageBlobsToDelete' : ActorMethod<[], Array<Uint8Array>>,
+  '_caffeineStorageConfirmBlobDeletion' : ActorMethod<
+    [Array<Uint8Array>],
+    undefined
+  >,
+  '_caffeineStorageCreateCertificate' : ActorMethod<
+    [string],
+    _CaffeineStorageCreateCertificateResult
+  >,
+  '_caffeineStorageRefillCashier' : ActorMethod<
+    [[] | [_CaffeineStorageRefillInformation]],
+    _CaffeineStorageRefillResult
+  >,
+  '_caffeineStorageUpdateGatewayPrincipals' : ActorMethod<[], undefined>,
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
+  'adminCreditSpecificUser' : ActorMethod<[], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  'checkDepositEligibility' : ActorMethod<[], DepositEligibility>,
   'creditUserWallet' : ActorMethod<[Principal, number], undefined>,
   'getAIInsights' : ActorMethod<[], Array<AIInsight>>,
   'getCallerNumber' : ActorMethod<[], bigint>,
@@ -47,17 +94,24 @@ export interface _SERVICE {
   'getCallerUserRole' : ActorMethod<[], UserRole>,
   'getCallerWalletBalance' : ActorMethod<[], [] | [number]>,
   'getCallerWeeklyReturn' : ActorMethod<[], [] | [number]>,
+  'getDepositRequestsTest' : ActorMethod<[], Array<DepositRequest>>,
   'getInvestmentPlans' : ActorMethod<[], Array<InvestmentPlan>>,
   'getLeads' : ActorMethod<[], Array<Lead>>,
+  'getTelegramBotConfig' : ActorMethod<[], TelegramBotConfig>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
   'getUserWalletBalance' : ActorMethod<[Principal], [] | [number]>,
   'getUserWeeklyReturn' : ActorMethod<[Principal], [] | [number]>,
   'initializeCallerWallet' : ActorMethod<[], undefined>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
   'purchaseInvestmentPlan' : ActorMethod<[string, number], undefined>,
+  'registerAuthenticatedUser' : ActorMethod<[], undefined>,
   'registerUser' : ActorMethod<[bigint], undefined>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
+  'setWalletBalance' : ActorMethod<[Principal, number], undefined>,
+  'setWalletBalanceByEmail' : ActorMethod<[string, number], undefined>,
+  'submitDeposit' : ActorMethod<[ExternalBlob], string>,
   'submitLead' : ActorMethod<[string, string, string], undefined>,
+  'updateTelegramBotConfig' : ActorMethod<[string, string, boolean], undefined>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];
